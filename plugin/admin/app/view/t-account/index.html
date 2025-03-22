@@ -60,8 +60,9 @@
 
         <!-- 表格行工具栏 -->
         <script type="text/html" id="table-bar">
-            <button class="pear-btn pear-btn-xs tool-btn" lay-event="edit" permission="app.admin.taccount.update">编辑</button>
-            <button class="pear-btn pear-btn-xs tool-btn" lay-event="remove" permission="app.admin.taccount.delete">删除</button>
+            <button class="pear-btn pear-btn-xs pear-btn-success" lay-event="test" permission="app.admin.taccount.postTest">发推测试</button>
+            <button class="pear-btn pear-btn-xs pear-btn-primary" lay-event="edit" permission="app.admin.taccount.update">编辑</button>
+            <button class="pear-btn pear-btn-xs pear-btn-danger" lay-event="remove" permission="app.admin.taccount.delete">删除</button>
         </script>
 
         <script src="/app/admin/component/layui/layui.js?v=2.8.12"></script>
@@ -78,7 +79,8 @@
             const DELETE_API = "/app/admin/t-account/delete";
             const INSERT_URL = "/app/admin/t-account/insert";
             const UPDATE_URL = "/app/admin/t-account/update";
-            
+            const TEST_URL   = "/app/admin/t-account/postTest";
+
             // 表格渲染
             layui.use(["table", "form", "common", "popup", "util"], function() {
                 let table = layui.table;
@@ -96,6 +98,7 @@
 						title: "ID",align: "center",
 						field: "id",
 						sort: true,
+                        hide: true,
 					},{
 						title: "用户id",align: "center",
 						field: "user_id",
@@ -110,80 +113,30 @@
 					},{
 						title: "Consumer Key",align: "center",
 						field: "x_consumer_key",
-						hide: true,
+                        hide: true,
 					},{
 						title: "Consumer Secret",align: "center",
 						field: "x_consumer_secret",
-						hide: true,
+                        hide: true,
 					},{
 						title: "Access Token",align: "center",
 						field: "x_access_token",
-						hide: true,
+                        hide: true,
 					},{
 						title: "Token Secret",align: "center",
 						field: "x_access_token_secret",
-						hide: true,
+                        hide: true,
 					},{
 						title: "Client ID",align: "center",
 						field: "x_client_id",
-						hide: true,
+                        hide: true,
 					},{
 						title: "Client Secret",align: "center",
 						field: "x_client_secret",
-						hide: true,
+                        hide: true,
 					},{
 						title: "Bearer Token",align: "center",
 						field: "x_bearer_token",
-						hide: true,
-					},{
-						title: "自动转发的kol列表",align: "center",
-						field: "x_kol_list",
-					},{
-						title: "限制推文长度",align: "center",
-						field: "x_limit",
-						templet: function (d) {
-							let field = "x_limit";
-							form.on("switch("+field+")", function (data) {
-								let load = layer.load();
-								let postData = {};
-								postData[field] = data.elem.checked ? 1 : 0;
-								postData[PRIMARY_KEY] = this.value;
-								$.post(UPDATE_API, postData, function (res) {
-									layer.close(load);
-									if (res.code) {
-				                        return layui.popup.failure(res.msg, function () {
-				                            data.elem.checked = !data.elem.checked;
-				                            form.render();
-				                        });
-				                    }
-									return layui.popup.success("操作成功");
-								})
-							});
-							let checked = d[field] == 1 ? "checked" : "";
-							return '<input type="checkbox" value="'+util.escape(d[PRIMARY_KEY])+'" lay-filter="'+util.escape(field)+'" lay-skin="switch" lay-text="'+util.escape('开启|关闭')+'" '+checked+'/>';
-						}
-					},{
-						title: "最小发文间隔（分钟）",align: "center",
-						field: "x_time_diff",
-					},{
-						title: "推文来源",align: "center",
-						field: "data_origin",
-						templet: function (d) {
-							let field = "data_origin";
-							if (typeof d[field] == "undefined") return "";
-							let items = [];
-							layui.each((d[field] + "").split(","), function (k , v) {
-								items.push(apiResults[field][v] || v);
-							});
-							return util.escape(items.join(","));
-						}
-					},{
-						title: "ai模板",align: "center",
-						field: "x_ai_template",
-						hide: true,
-					},{
-						title: "ai角色",align: "center",
-						field: "x_ai_user",
                         hide: true,
 					},{
 						title: "创建时间",align: "center",
@@ -198,7 +151,6 @@
 						toolbar: "#table-bar",
 						align: "center",
 						fixed: "right",
-						width: 120,
 					}
 				];
 				
@@ -231,6 +183,8 @@
                         remove(obj);
                     } else if (obj.event === "edit") {
                         edit(obj);
+                    } else if (obj.event === "test") {
+                        test(obj);
                     }
                 });
 
@@ -294,6 +248,19 @@
                         maxmin: true,
                         area: [common.isModile()?"100%":"85%", common.isModile()?"100%":"85%"],
                         content: INSERT_URL
+                    });
+                }
+
+                // 测试发推
+                let test = function(obj) {
+                    let value = obj.data[PRIMARY_KEY];
+                    layer.open({
+                        type: 2,
+                        title: "测试发推",
+                        shade: 0.1,
+                        maxmin: true,
+                        area: [common.isModile()?"100%":"85%", common.isModile()?"100%":"85%"],
+                        content: TEST_URL + "?" + PRIMARY_KEY + "=" + value
                     });
                 }
 

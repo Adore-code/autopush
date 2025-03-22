@@ -2,6 +2,7 @@
 
 namespace plugin\admin\app\controller;
 
+use app\controller\TwitterController;
 use support\Request;
 use support\Response;
 use plugin\admin\app\model\TAccount;
@@ -35,6 +36,45 @@ class TAccountController extends Crud
     public function index(): Response
     {
         return view('t-account/index');
+    }
+
+    public function postTest(Request $request):  Response
+    {
+        $accountID = $request->get('id');
+        $account   = TAccount::find($accountID);
+        $account   = $account->toArray();
+
+        if (!$account) {
+            return json(['error' => 'Account not found']);
+        }
+
+        $settings = [
+            'account_id' => $account['x_account'],
+            'access_token' => $account['x_access_token'],
+            'access_token_secret' => $account['x_access_token_secret'],
+            'consumer_key' => $account['x_consumer_key'],
+            'consumer_secret' => $account['x_consumer_secret'],
+            'bearer_token' => $account['x_bearer_token'],
+        ];
+
+        $twitter = new TwitterController();
+
+        if ($request->method() === 'POST') {
+            $post = $request->post();
+            $content = strip_tags($post['content']);
+
+            $message = '发送失败！请仔细检查API是否填写正确！';
+            $response = [];
+            if($content)  $response = $twitter->createTweet($settings, $content);
+            if($response)
+            {
+                if(isset($response->status))   $message = $response->detail;
+                if(isset($response->data->id)) $message = "发送成功！ 推文链接：https://x.com/ahei750513/status/".$response->data->id;
+            }
+
+            return $this->json(1, $message);
+        }
+        return view('t-account/test');
     }
 
     public function select(Request $request): Response

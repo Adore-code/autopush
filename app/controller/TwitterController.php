@@ -2,6 +2,7 @@
 
 namespace app\controller;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Noweh\TwitterApi\Client;
 use support\Response;
 
@@ -12,35 +13,31 @@ class TwitterController
      *
      * @return Client
      */
-    private function getClient(): Client
+    private function getClient($settings): Client
     {
-        $settings = [
-            'account_id' => 'YOUR_ACCOUNT_ID',
-            'access_token' => 'YOUR_ACCESS_TOKEN',
-            'access_token_secret' => 'YOUR_ACCESS_TOKEN_SECRET',
-            'consumer_key' => 'YOUR_CONSUMER_KEY',
-            'consumer_secret' => 'YOUR_CONSUMER_SECRET',
-            'bearer_token' => 'YOUR_BEARER_TOKEN',
-        ];
-
         return new Client($settings);
     }
 
     /**
      * 发送推文
      *
+     * @param $settings
      * @param string $text 推文内容
-     * @return Response
+     * @return mixed
      */
-    public function createTweet(string $text): Response
+    public function createTweet($settings, string $text): mixed
     {
-        $client = $this->getClient();
+        try {
+            $client = $this->getClient($settings);
 
-        $response = $client->tweet()->create()->performRequest([
-            'text' => $text
-        ]);
+            $response = $client->tweet()->create()->performRequest([
+                'text' => $text
+            ]);
 
-        return json($response);
+            return $response;
+        } catch (\Throwable $e) {
+            return json_decode($e->getMessage());
+        }
     }
 
     /**
