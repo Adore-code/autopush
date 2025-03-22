@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <link rel="stylesheet" href="/app/admin/component/layui/css/layui.css?v=2.8.12" />
+        <link rel="stylesheet" href="/app/admin/component/pear/css/pear.css" />
+        <link rel="stylesheet" href="/app/admin/admin/css/reset.css" />
+    </head>
+    <body class="pear-container">
+        <style>
+            .layui-input-block input {
+                width: 300px;
+            }
+        </style>
+
+        <div class="layui-card">
+            <div class="layui-card-body">
+
+                <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本信息</li>
+                    <li>AI配置</li>
+                </ul>
+                <div class="layui-tab-content">
+
+                    <!-- 基本信息 -->
+                    <div class="layui-tab-item layui-show">
+
+                        <form class="layui-form" lay-filter="baseInfo">
+                            <div class="layui-row">
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">用户ID</label>
+                                        <div class="layui-input-block">
+                                            <input type="number" name="user_id" required lay-verify="required" placeholder="请输入用户ID" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">类型</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="type" required lay-verify="required" placeholder="类型" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 以下结构照此类推 -->
+                            <div class="layui-row">
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Consumer Key</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="x_consumer_key" placeholder="x_consumer_key" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Consumer Secret</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="x_consumer_secret" placeholder="x_consumer_secret" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-row">
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Access Token</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="x_access_token" placeholder="x_access_token" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Token Secret</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="x_access_token_secret" placeholder="x_access_token_secret" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-row">
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Client ID</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="x_client_id" placeholder="x_client_id" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Client Secret</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="x_client_secret" placeholder="x_client_secret" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-row">
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Bearer Token</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="x_bearer_token" placeholder="x_bearer_token" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">推特账号</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="x_account" placeholder="x_account" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-row">
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item layui-form-text">
+                                        <label class="layui-form-label">KOL列表</label>
+                                        <div class="layui-input-block">
+                                            <textarea name="x_kol_list" placeholder="请输入KOL列表" class="layui-textarea"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">限制数</label>
+                                        <div class="layui-input-block">
+                                            <input type="number" name="x_limit" placeholder="x_limit" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-row">
+                                <div class="layui-col-xs12 layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">时间差</label>
+                                        <div class="layui-input-block">
+                                            <input type="number" name="x_time_diff" placeholder="x_time_diff" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 文本域保持整行更好操作 -->
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">AI 模板</label>
+                                <div class="layui-input-block">
+                                    <textarea name="x_ai_template" placeholder="请输入AI模板" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">AI 用户</label>
+                                <div class="layui-input-block">
+                                    <textarea name="x_ai_user" placeholder="请输入AI用户" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="saveBaseInfo">
+                                        提交
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                    <!-- AI设置 -->
+                    <div class="layui-tab-item">
+
+                        <form class="layui-form" lay-filter="menuInfo">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">菜单url</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="data" required  lay-verify="required" placeholder="请输入菜单url" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">默认菜单ID</label>
+                                <div class="layui-input-block">
+                                    <input type="number" name="select" required  lay-verify="required" placeholder="请输入默认菜单ID" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">开启手风琴</label>
+                                <div class="layui-input-block">
+                                    <input type="checkbox" name="accordion" id="accordion" lay-skin="switch" />
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">折叠菜单</label>
+                                <div class="layui-input-block">
+                                    <input type="checkbox" id="collapse" name="collapse" lay-skin="switch" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="saveMenuInfo">
+                                        提交
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+
+
+        <script src="/app/admin/component/layui/layui.js?v=2.8.12"></script>
+        <script src="/app/admin/component/pear/pear.js"></script>
+        <script src="/app/admin/admin/js/permission.js"></script>
+        <script>
+
+            // 基础设置
+            layui.use(["upload", "layer", "popup"], function() {
+                let $ = layui.$;
+                let form = layui.form;
+
+                // image
+                let input = $("#image").prev();
+                input.prev().attr("src", input.val());
+                layui.$("#attachment-choose-image").on("click", function() {
+                    parent.layer.open({
+                        type: 2,
+                        title: "选择附件",
+                        content: "/app/admin/upload/attachment?ext=jpg,jpeg,png,gif,bmp",
+                        area: ["95%", "90%"],
+                        success: function (layero, index) {
+                            parent.layui.$("#layui-layer" + index).data("callback", function (data) {
+                                input.val(data.url).prev().attr("src", data.url);
+                            });
+                        }
+                    });
+                });
+                layui.upload.render({
+                    elem: "#image",
+                    url: "/app/admin/x/avatar",
+                    acceptMime: "image/gif,image/jpeg,image/jpg,image/png",
+                    done: function (res) {
+                        if (res.code) {
+                            return layui.popup.failure(res.msg);
+                        }
+                        this.item.prev().val(res.data.url).prev().attr("src", res.data.url);
+                    }
+                });
+
+                // 提交
+                form.on("submit(saveBaseInfo)", function(data){
+                    $.ajax({
+                        url: "/app/admin/x/update",
+                        dataType: "json",
+                        type: "POST",
+                        data: {logo: data.field},
+                        success: function (res) {
+                            if (res.code) {
+                                return layui.popup.failure(res.msg);
+                            }
+                            return layui.popup.success("操作成功");
+                        }
+                    });
+                    return false;
+                });
+            });
+
+            // 菜单设置
+            layui.use(["upload", "layer", "popup"], function() {
+                let $ = layui.$;
+                let form = layui.form;
+                // 提交
+                form.on("submit(saveMenuInfo)", function(data){
+                    $.ajax({
+                        url: "/app/admin/x/update",
+                        dataType: "json",
+                        type: "POST",
+                        data: {menu: data.field},
+                        success: function (res) {
+                            if (res.code) {
+                                return layui.popup.failure(res.msg);
+                            }
+                            return layui.popup.success("操作成功");
+                        }
+                    });
+                    return false;
+                });
+            });
+
+            // 标签设置
+            layui.use(["upload", "layer", "popup"], function() {
+                let $ = layui.$;
+                let form = layui.form;
+                // 提交
+                form.on("submit(saveTabInfo)", function(data){
+                    let field = data.field;
+                    field.index = {
+                        id: field.id,
+                        href: field.href,
+                        title: field.title,
+                    };
+                    delete data.field;
+                    $.ajax({
+                        url: "/app/admin/x/update",
+                        dataType: "json",
+                        type: "POST",
+                        data: {tab: field},
+                        success: function (res) {
+                            if (res.code) {
+                                return layui.popup.failure(res.msg);
+                            }
+                            return layui.popup.success("操作成功");
+                        }
+                    });
+                    // 删除sessionStorage缓存
+                    sessionStorage.clear();
+                    return false;
+                });
+            });
+
+            layui.use(["form"], function () {
+                let form = layui.form;
+                let $ = layui.$;
+                $.ajax({
+                    url: "/app/admin/x/get",
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code) {
+                            return layui.popup.failure(res.msg);
+                        }
+                        form.val("baseInfo", res.logo);
+                        $("#image").prev().val(res.logo.image).prev().attr("src", res.logo.image);
+                        form.val("menuInfo", res.menu);
+                        let tab = res.tab;
+                        let index = tab.index;
+                        delete tab.index;
+                        tab.id = index.id;
+                        tab.title = index.title;
+                        tab.href= index.href;
+                        form.val("tabInfo", res.tab);
+                    }
+                });
+
+            });
+
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+}
+.icp {
+    color: #ffffff;
+}
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background: url('/app/signin/image/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.container .login-container {
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+    padding: 0 24px;
+}
+
+.container .login-container .login-header-wrap {
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.container .login-container .login-header-wrap .login-header-nav {
+    padding-top: 30px;
+}
+
+.container .login-container .login-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-top: 40px;
+}
+
+.container .login-container .login-body .login-logo {
+    color: #ffffff;
+    margin: 24px 0 32px;
+    text-align: center;
+}
+
+.container .login-container .login-body .login-logo .login-logo-title {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.container .login-container .login-body .login-logo .login-logo-desc {
+    margin-top: 16px;
+    font-size: 18px;
+}
+
+.container .login-container .login-body .login-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.container .login-container .login-body .login-box .login-form-box {
+    width: 400px;
+}
+
+.container .login-container .login-body .login-footer {
+    margin-top: 32px;
+    font-size: 12px;
+    text-align: center;
+    color: #ffffff;
+    line-height: 12px;
+}

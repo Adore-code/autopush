@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta name="viewport" content="width=device-width,   initial-scale=1.0,   user-scalable=no,   minimum-scale=1.0   maximum-scale=1.0"/>
+
+    <link rel="stylesheet" href="/app/signin/npm/@arco-design/web-vue@2.53.2/arco.css">
+    <link rel="stylesheet" href="/app/signin/css/theme.css">
+
+    <script src="/app/signin/npm/vue/3.3.8/vue.global.min.js"></script>
+    <script src="/app/signin/npm/@arco-design/web-vue@2.53.2/arco-vue.js"></script>
+    <script src="/app/signin/npm/@arco-design/web-vue@2.53.2/arco-vue-icon.min.js"></script>
+    <script src="/app/signin/npm/axios@1.6.2/dist/axios.js"></script>
+
+    <link href="/app/signin/css/register/login.css" rel="stylesheet">
+    <link href="/app/signin/css/register/login-from.css" rel="stylesheet">
+    <link href="/app/signin/css/register/mobile.css" media="screen and (max-width:768px)" rel="stylesheet">
+    <link href="/app/signin/css/register/pc.css" media="screen and (min-width:768px)" rel="stylesheet">
+</head>
+<body>
+<div id="container" class="container">
+    <div class="login-container">
+        <div class="login-header-wrap">
+            <div class="login-header-nav"><?php if(in_array('logo_text', $show_list)){ ?><?=$logo_text?><?php } ?></div>
+        </div>
+        <div class="login-body">
+            <div class="login-box">
+                <div class="login-form-box">
+                    <!--开始-->
+                    <div id="from-container" class="from-container">
+                        <div class="login-logo">
+                            <div class="login-logo-title"><?php if(in_array('main_title', $show_list)){ ?><?=$main_title?><?php } ?></div>
+                            <div class="login-logo-desc"><?php if(in_array('subtitle', $show_list)){ ?><?=$subtitle?><?php } ?></div>
+                        </div>
+                        <div class="from-tabs">
+                            <!-- 登录表单 -->
+                            <form class="from-info from-password">
+
+                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入用户名" allow-clear /></div>
+                                <?php if($settings['nickname_enable']){ ?>
+                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入昵称" allow-clear /></div>
+                                <?php } ?>
+                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入密码" allow-clear /></div>
+                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请重复密码" allow-clear /></div>
+
+                                <?php if($settings['mobile_enable']){ ?>
+                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入手机号" allow-clear /></div>
+                                <?php if($settings['mobile_verify']){ ?>
+                                <div class="from-entry">
+                                    <a-input-group style="width: 100%">
+                                        <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="captcha.code" /></div>
+                                        <div @click="rounded()" style="border: 1px solid transparent;cursor:pointer;">
+                                            <a-button type="primary" v-if="captcha.mobileCountdown > 0" disabled>{{ captcha.mobileCountdown }}秒</a-button>
+                                            <a-button type="primary" v-else-if="captcha.mobileCountdown === null" @click="smsNext()">发送</a-button>
+                                            <a-button type="primary" v-else @click="smsNext()">重发</a-button>
+                                        </div>
+                                    </a-input-group>
+                                </div>
+                                <?php } ?>
+                                <?php } ?>
+
+
+                                <?php if($settings['email_enable']){ ?>
+                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入邮箱" allow-clear /></div>
+                                <?php if($settings['email_verify']){ ?>
+                                <div class="from-entry">
+                                    <a-input-group style="width: 100%">
+                                        <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="captcha.code" /></div>
+                                        <div @click="rounded()" style="border: 1px solid transparent;cursor:pointer;">
+                                            <a-button type="primary" v-if="captcha.emailCountdown > 0" disabled>{{ captcha.emailCountdown }}秒</a-button>
+                                            <a-button type="primary" v-else-if="captcha.emailCountdown === null" @click="smsNext()">发送</a-button>
+                                            <a-button type="primary" v-else @click="smsNext()">重发</a-button>
+                                        </div>
+                                    </a-input-group>
+                                </div>
+                                <?php } ?>
+                                <?php } ?>
+                                <?php if($settings['captcha_enable']){ ?>
+                                <div class="from-entry">
+                                    <div style="display: flex;flex-direction: row;">
+                                        <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="captcha.code" /></div>
+                                        <div @click="rounded()" style="border: 1px solid transparent;cursor:pointer;">
+                                            <a-image :height="31" :src="imageCodeUrl" :show-loader="true" :preview="false" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                                <div class="from-entry">
+                                    <a-button size="large" type="primary" :loading="loginButtonStatus.login" style="width: 100%;" @click="loginCaptcha()">注册</a-button>
+                                </div>
+                            </form>
+                            <div class="from-entry from-login-tool">
+                                <div class="from-auto-login">
+                                    <span @click="login()">已有账号？点这里登录</span>
+                                </div>
+
+                                <div class="from-more">
+                                    <span @click="forgetPassword()">忘记密码</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ouh"></div>
+                        <div class="tip-button">
+                            <p>登录或注册即代表同意 <a-link @click="readAgreement()" style="font-size: 10px;">用户协议</a-link></p>
+                            <p>未满18周岁未成年人请勿自行注册，其注册、登录账号及使用服务需征得监护人同意</p>
+                        </div>
+                    </div>
+                    <!--结束-->
+                </div>
+            </div>
+            <div class="login-footer">
+                <?php if($icp){ ?>
+                <div><a-link target="_blank" :hoverable="false" style="color: #ffffff;font-size: 12px;" href="http://beian.miit.gov.cn/"><?=$icp?></a-link></div>
+                <?php } ?>
+                <?php if($beian){ ?>
+                <div>
+                    <a-link target="_blank" :hoverable="false" style="color: #ffffff;font-size: 12px;" :href="'https://beian.mps.gov.cn/#/query/webSearch?code=<?=$beian_number?>'">
+                        <div style="display: flex;flex-direction: row;justify-content: center;">
+                            <img style="width: 14px" src="/app/signin/image/beian.png">
+                            <div style="margin-left: 4px;"><?=$beian?></div>
+                        </div>
+                    </a-link>
+                </div>
+                <?php } ?>
+                <?php if($footer_html){ ?>
+                <div><?=$footer_html?></div>
+                <?php } ?>
+            </div>
+        </div>
+        <a-modal :visible="agreement.visible" width="800px" :mask-closable="false" @ok="handleAgreementOk" @cancel="handleAgreementCancel" :closable="false" :hide-cancel="true" title="阅读用户协议">
+            <div style="width: 100%; height: 600px;">
+                <iframe id="bi_iframe" style="width: 100%; height: 100%;" src="/app/signin/agreement"  frameborder="0" scrolling="auto"></iframe>
+            </div>
+        </a-modal>
+        <a-modal :visible="captcha.visible" width="360px" :mask-closable="false" draggable @ok="handleCaptchaOk" @cancel="handleCaptchaCancel" :ok-loading="loginButtonStatus.captcha">
+            <template #title>确保你不是机器人</template>
+            <div style="display: flex;flex-direction: row;">
+                <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="captcha.code" /></div>
+                <div @click="rounded()" style="border: 1px solid transparent;cursor:pointer;">
+                    <a-image :height="31" :src="imageCodeUrl" :show-loader="true" :preview="false" />
+                </div>
+            </div>
+        </a-modal>
+    </div>
+</div>
+<script src="/app/signin/js/register.js"></script>
+</body>
+</html>

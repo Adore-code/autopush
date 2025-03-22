@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设置</title>
+    <link rel="stylesheet" href="/app/signin/npm/@arco-design/web-vue@2.53.2/arco.css">
+
+    <script src="/app/signin/npm/vue/3.3.8/vue.global.min.js"></script>
+
+    <script src="/app/signin/npm/@arco-design/web-vue@2.53.2/arco-vue.js"></script>
+    <script src="/app/signin/npm/@arco-design/web-vue@2.53.2/arco-vue-icon.min.js"></script>
+    <script src="/app/signin/npm/axios@1.6.2/dist/axios.js"></script>
+</head>
+<body>
+<div id="plugin-login">
+    <div class="login-container">
+        <a-tabs default-active-key="setting">
+            <a-tab-pane key="setting" title="通用设置">
+                <div style="display: flex;flex-direction: row;">
+                    <a-form :model="setting" :style="{ width: '600px' }" @submit="handleSettingSubmit">
+                        <a-form-item field="icp" label="ICP备案">
+                            <a-input v-model="setting.icp" placeholder="ICP备案"/>
+                        </a-form-item>
+                        <a-form-item field="beian" label="公安网备">
+                            <a-input v-model="setting.beian" placeholder="公安网备" />
+                        </a-form-item>
+                        <a-form-item field="footer_html" label="其它信息">
+                            <a-input v-model="setting.footer_html" placeholder="其它" />
+                        </a-form-item>
+
+                        <a-form-item>
+                            <a-button type="primary" html-type="submit">保存</a-button>
+                        </a-form-item>
+                    </a-form>
+                </div>
+            </a-tab-pane>
+
+            <a-tab-pane key="captcha" title="验证码">
+                <div style="display: flex;flex-direction: row;">
+                    <a-tabs default-active-key="account_login" position="left" size="large" type="card-gutter">
+                        <template v-for="(item, key) in captcha.setting">
+                            <a-tab-pane :key="key" :title="item.title">
+                                <a-form :model="item" :style="{ width: '600px' }" style="padding: 16px;min-height: 600px;" @submit="(data)=> { handleCaptchaSubmit(data, key) }">
+                                    <a-form-item :field="key" :label="item.title">
+                                        <a-radio-group v-model="item.type" @change="(val) => { setCaptchaType(key, val) }">
+                                            <a-radio value="NoCaptcha">关闭</a-radio>
+                                            <a-radio value="ImageCaptcha">图片验证码</a-radio>
+                                            <a-radio value="TxCaptcha">腾讯验证码</a-radio>
+                                        </a-radio-group>
+                                    </a-form-item>
+                                    <template v-for="(val, k) in captcha.captchaType[item.type].param">
+                                        <a-form-item :field="k" :label="val.title">
+                                            <div><a-input v-model="item.param[k]" :placeholder="val.title" :disabled="val.disabled" /></div>
+                                            <template v-if="val.extra" #extra><div>{{val.extra}}</div></template>
+                                        </a-form-item>
+                                    </template>
+                                    <a-form-item>
+                                        <a-button type="primary" html-type="submit">保存</a-button>
+                                    </a-form-item>
+                                </a-form>
+                            </a-tab-pane>
+                        </template>
+                    </a-tabs>
+                </div>
+            </a-tab-pane>
+
+            <a-tab-pane key="login" title="登录设置">
+                <div style="display: flex;flex-direction: row;">
+                    <a-form :model="login" :style="{ width: '800px' }" @submit="handleLoginSubmit">
+                        <a-form-item field="main_title" label="中间主标题">
+                            <a-input v-model="login.main_title" placeholder="中间主标题"/>
+                        </a-form-item>
+                        <a-form-item field="subtitle" label="中间副标题">
+                            <a-input v-model="login.subtitle" placeholder="中间副标题"/>
+                        </a-form-item>
+                        <a-form-item field="logo_text" label="左上角文字">
+                            <a-input v-model="login.logo_text" placeholder="左上角文字"/>
+                        </a-form-item>
+                        <a-form-item field="show_list" label="显示设置">
+                            <a-checkbox-group v-model="login.show_list">
+                                <a-checkbox value="main_title">中间主标题</a-checkbox>
+                                <a-checkbox value="subtitle">中间副标题</a-checkbox>
+                                <a-checkbox value="logo_text">左上角文字</a-checkbox>
+                            </a-checkbox-group>
+                        </a-form-item>
+                        <a-form-item>
+                            <a-button type="primary" html-type="submit">保存</a-button>
+                        </a-form-item>
+                    </a-form>
+                </div>
+            </a-tab-pane>
+            <!--<a-tab-pane key="register" title="注册设置">
+                <div style="display: flex;flex-direction: row;">
+                    <a-form :model="register" :style="{ width: '800px' }" @submit="handleLoginSubmit">
+                        <a-form-item field="main_title" label="中间主标题">
+                            <a-input v-model="register.main_title" placeholder="中间主标题"/>
+                        </a-form-item>
+                        <a-form-item field="subtitle" label="中间副标题">
+                            <a-input v-model="register.subtitle" placeholder="中间副标题"/>
+                        </a-form-item>
+                        <a-form-item field="logo_text" label="左上角文字">
+                            <a-input v-model="register.logo_text" placeholder="左上角文字"/>
+                        </a-form-item>
+                        <a-form-item field="show_list" label="显示设置">
+                            <a-checkbox-group v-model="register.show_list">
+                                <a-checkbox value="main_title">中间主标题</a-checkbox>
+                                <a-checkbox value="subtitle">中间副标题</a-checkbox>
+                                <a-checkbox value="logo_text">左上角文字</a-checkbox>
+                            </a-checkbox-group>
+                        </a-form-item>
+                        <a-form-item>
+                            <a-button type="primary" html-type="submit">保存</a-button>
+                        </a-form-item>
+                    </a-form>
+                </div>
+            </a-tab-pane>-->
+            <a-tab-pane key="agreement" title="用户协议">
+                <div style="display: flex;flex-direction: row;">
+                    <a-form :model="agreement" :style="{ width: '600px' }" @submit="handleAgreementSubmit">
+                        <a-form-item field="header" label="协议头部">
+                            <a-input v-model="agreement.header" placeholder="协议头部"/>
+                        </a-form-item>
+                        <a-form-item field="body" label="协议内容">
+                            <a-textarea v-model="agreement.body" :auto-size="true" placeholder="协议内容"/>
+                        </a-form-item>
+                        <a-form-item field="footer" label="协议尾部">
+                            <a-input v-model="agreement.footer" placeholder="协议尾部" />
+                        </a-form-item>
+
+                        <a-form-item>
+                            <a-button type="primary" html-type="submit">保存</a-button>
+                        </a-form-item>
+                    </a-form>
+                </div>
+            </a-tab-pane>
+        </a-tabs>
+    </div>
+</div>
+<script>
+    const { defineComponent, ref, reactive,nextTick, computed, watch, onMounted, onBeforeUnmount, onUpdated, } = Vue
+    const app = Vue.createApp({
+        data() {
+            return {
+                setting: {
+                    icp: "<?=$setting['icp']?>",
+                    beian: "<?=$setting['beian']?>",
+                    footer_html: "<?=$setting['footer_html']?>",
+                },
+                captcha: {
+                    captchaType: JSON.parse('<?=json_encode($captcha["captchaType"])?>'),
+                    setting: JSON.parse('<?=json_encode($captcha["setting"])?>'),
+                },
+                login: {
+                    main_title: "<?=$login['main_title']?>",
+                    subtitle: "<?=$login['subtitle']?>",
+                    logo_text: "<?=$login['logo_text']?>",
+                    show_list: JSON.parse('<?=json_encode($login["show_list"])?>'),
+                },
+                register: {
+                    main_title: "<?=$register['main_title']?>",
+                    subtitle: "<?=$register['subtitle']?>",
+                    logo_text: "<?=$register['logo_text']?>",
+                    show_list: JSON.parse('<?=json_encode($register["show_list"])?>'),
+                },
+                agreement: {
+                    header: "<?=$agreement['header']?>",
+                    body:   "<?=$agreement['body']?>",
+                    footer: "<?=$agreement['footer']?>",
+                },
+            }
+        },
+        beforeMount(){},
+        mounted(){
+            console.log('进入 onMounted')
+        },
+        methods: {
+            hello(variable) {
+                console.log('hello', variable);
+            },
+            setCaptchaType(key, type){
+                // 图片验证码强制设置
+                if (type === 'ImageCaptcha'){
+                    this.captcha.setting[key].param.image_code_url = '/app/signin/captcha/image';
+                }
+            },
+            handleSettingSubmit(data){
+                console.log('handleSubmit', data);
+                axios.post('/app/signin/admin/setting/save', data.values).then(res => {
+                    console.log('res', res);
+                    if(res.data.code === 0){
+                        this.$message.success('保存成功')
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                })
+            },
+            handleLoginSubmit(data){
+                console.log('handleSubmit', data);
+                axios.post('/app/signin/admin/setting/login', data.values).then(res => {
+                    console.log('res', res);
+                    if(res.data.code === 0){
+                        this.$message.success('保存成功');
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                })
+            },
+            handleAgreementSubmit(data){
+                console.log('handleSubmit', data);
+                axios.post('/app/signin/admin/setting/agreement', data.values).then(res => {
+                    console.log('res', res);
+                    if(res.data.code === 0){
+                        this.$message.success('保存成功');
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                })
+            },
+            handleCaptchaSubmit(data, key){
+                console.log('handleCaptchaSubmit', data, key);
+                axios.post('/app/signin/admin/setting/captcha?key='+key, data.values).then(res => {
+                    console.log('res', res);
+                    if(res.data.code === 0){
+                        this.$message.success('保存成功');
+                    }else{
+                        this.$message.error(res.data.msg);
+                    }
+                })
+            },
+        }
+    });
+    app.use(ArcoVue).use(ArcoVueIcon);
+    app.mount("#plugin-login");
+</script>
+</body>
+<style>
+    #plugin-login {
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+        margin: 16px;
+    }
+    #plugin-login .login-container {
+        width: 100%;
+        height: 100%;
+        margin: 16px;
+
+    }
+</style>
+</html>

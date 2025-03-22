@@ -1,14 +1,514 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="/favicon.ico"/>
-    <title>webman</title>
+    <meta charset="UTF-8" />
+    <title>Autopush - AI驱动的推特代运营工具</title>
+    <style>
+        /* 全局基础样式 */
+        body {
+            margin: 0;
+            background: #000;
+            color: #fff;
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+        h1, h2, h3, p {
+            margin: 0;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        /* 可重复使用的容器类 (限制内容最大宽度) */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* 通用段落和标题样式 */
+        p {
+            line-height: 1.6;
+        }
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2rem; margin-bottom: 1em; }
+        h3 { font-size: 1.5rem; margin: 0.5em 0; }
+        /* 段落和标题的颜色细微差异 */
+        .subtitle, .testimonial-text {
+            color: #ccc;
+        }
+        .testimonial-author {
+            color: #888;
+        }
 
+        /* ================= Hero 区域样式 ================= */
+        #hero {
+            position: relative;
+            height: 100vh;               /* 占满视窗高度 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            background: #000;
+        }
+        #hero .hero-text {
+            position: relative;
+            z-index: 1; /* 确保文字在粒子Canvas之上 */
+        }
+        #hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5em;
+        }
+        #hero .tagline {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5em;
+        }
+        #hero .subtitle {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-bottom: 1em;
+        }
+        /* CTA按钮通用样式 */
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: linear-gradient(45deg, #00d2ff, #3a47d5); /* 按钮背景渐变 */
+            color: #fff;
+            box-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .cta-button:hover {
+            /* 悬停发光效果 */
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.8);
+        }
+
+        /* 粒子Canvas样式（全屏覆盖hero背景） */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* ================= 主要功能模块样式 ================= */
+        #features {
+            background: #0a0a0a;  /* 略浅的黑色背景以区分Hero */
+            padding: 60px 20px;
+        }
+        #features .features-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+        }
+        #features .feature-item {
+            flex: 1 1 calc(20% - 40px); /* 每个功能模块约占宽度的20%，减去gap */
+            min-width: 220px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        #features .feature-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* 功能图标样式 */
+        #features .feature-item .icon {
+            color: #1da1f2;            /* 图标主色调（Twitter蓝） */
+            margin-bottom: 0.5em;
+        }
+        #features .feature-item .icon svg {
+            width: 48px;
+            height: 48px;
+        }
+        #features .feature-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.3em;
+        }
+        #features .feature-item p {
+            font-size: 0.95rem;
+            color: #aaa;
+            line-height: 1.5;
+        }
+        /* 顺序渐进显示效果：按照列表顺序延迟动画 */
+        #features .feature-item:nth-child(1) { transition-delay: 0.2s; }
+        #features .feature-item:nth-child(2) { transition-delay: 0.4s; }
+        #features .feature-item:nth-child(3) { transition-delay: 0.6s; }
+        #features .feature-item:nth-child(4) { transition-delay: 0.8s; }
+        #features .feature-item:nth-child(5) { transition-delay: 1.0s; }
+
+        /* ================= AI 对话模拟区样式 ================= */
+        #chat-simulation {
+            background: #000;
+            padding: 60px 20px;
+        }
+        #chat-simulation .chat-window {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-simulation .message {
+            display: inline-block;
+            align-self: flex-start;
+            max-width: 80%;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+            font-size: 1rem;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        #chat-simulation .message.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #chat-simulation .message.user {
+            background: #333;
+            color: #fff;
+            align-self: flex-start;
+            /* 左侧消息圆角微调 */
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+        #chat-simulation .message.ai {
+            background: #1da1f2;
+            color: #fff;
+            align-self: flex-end;
+            /* 右侧消息圆角微调 */
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+        /* 对话消息顺序延迟显示 */
+        #chat-simulation .message:nth-child(1) { transition-delay: 0.2s; }
+        #chat-simulation .message:nth-child(2) { transition-delay: 0.4s; }
+        #chat-simulation .message:nth-child(3) { transition-delay: 0.6s; }
+        #chat-simulation .message:nth-child(4) { transition-delay: 0.8s; }
+
+        /* ================= 用户推荐(KOL风采)样式 ================= */
+        #testimonials {
+            background: #0f0f0f;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        #testimonials .testimonials-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        #testimonials .testimonial-item {
+            display: none; /* 初始隐藏，JS 轮播时显示 */
+            text-align: center;
+            padding: 20px;
+        }
+        #testimonials .testimonial-item.active {
+            display: block;
+        }
+        #testimonials .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 2px solid #1da1f2;
+        }
+        #testimonials .testimonial-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 8px;
+            color: #ddd;
+        }
+        #testimonials .testimonial-author {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* ================= 底部CTA区样式 ================= */
+        #cta-section {
+            background: linear-gradient(90deg, #00d2ff, #3a47d5);
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+        }
+        #cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5em;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        #cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 1em;
+            color: #f0f0f0;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        /* 覆盖CTA按钮在彩色背景下的样式，使其更显眼 */
+        #cta-section .cta-button {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        #cta-section .cta-button:hover {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+    </style>
 </head>
 <body>
-hello <?=htmlspecialchars($name)?>
+
+<!-- 品牌介绍与口号 (Hero 区域) -->
+<section id="hero">
+    <!-- 粒子背景 Canvas -->
+    <canvas id="particle-canvas"></canvas>
+    <!-- 文案内容 -->
+    <div class="hero-text">
+        <h1 class="reveal">Autopush</h1>
+        <p class="tagline reveal">无需人工，智能发布</p>
+        <p class="subtitle reveal">Autopush 是一款由 AI 驱动的推特代运营工具，让社交媒体运营前所未有地高效省心。</p>
+        <a href="#" class="cta-button reveal">开启免费体验</a>
+    </div>
+</section>
+
+<!-- 主要功能模块 -->
+<section id="features">
+    <div class="container">
+        <h2>主要功能</h2>
+        <div class="features-grid">
+            <!-- 功能1：自动发布 -->
+            <div class="feature-item">
+                <div class="icon">
+                    <!-- 火箭图标（表示自动发布） -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3" />
+                        <path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3" />
+                        <path d="M15 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                    </svg>
+                </div>
+                <h3>自动发布</h3>
+                <p>AI 智能定时发布内容，无需手动操作，让您的账号 7x24 小时活跃。</p>
+            </div>
+            <!-- 功能2：多平台联动 -->
+            <div class="feature-item">
+                <div class="icon">
+                    <!-- 链接/分享图标（表示多平台联动） -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 15l6 -6" />
+                        <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" />
+                        <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" />
+                    </svg>
+                </div>
+                <h3>多平台联动</h3>
+                <p>一键同步内容到多个社交平台，覆盖全网渠道，扩大影响力。</p>
+            </div>
+            <!-- 功能3：AI 自动互动 -->
+            <div class="feature-item">
+                <div class="icon">
+                    <!-- 机器人图标（表示AI互动） -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />
+                        <path d="M12 2v2" />
+                        <path d="M9 12v9" />
+                        <path d="M15 12v9" />
+                        <path d="M5 16l4 -2" />
+                        <path d="M15 14l4 2" />
+                        <path d="M9 18h6" />
+                        <path d="M10 8v.01" />
+                        <path d="M14 8v.01" />
+                    </svg>
+                </div>
+                <h3>AI 自动互动</h3>
+                <p>自动回复评论与私信，智能与粉丝互动，全天候维护活跃度。</p>
+            </div>
+            <!-- 功能4：KOL 内容解析 -->
+            <div class="feature-item">
+                <div class="icon">
+                    <!-- 分析报表图标（表示内容解析） -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                        <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                        <path d="M9 17v-5" />
+                        <path d="M12 17v-1" />
+                        <path d="M15 17v-3" />
+                    </svg>
+                </div>
+                <h3>KOL 内容解析</h3>
+                <p>分析行业 KOL 的内容策略，提供数据洞察，助您制定更优内容计划。</p>
+            </div>
+            <!-- 功能5：热点追踪 -->
+            <div class="feature-item">
+                <div class="icon">
+                    <!-- 火焰图标（表示热点追踪） -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.621 -2.333 5.588c0 3.704 3.134 6.706 7 6.706s7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235" />
+                    </svg>
+                </div>
+                <h3>热点追踪</h3>
+                <p>实时监测社交媒体热点，抓住流量红利，始终引领话题潮流。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AI 助手对话模拟区 -->
+<section id="chat-simulation">
+    <div class="container">
+        <h2>AI 助手对话模拟</h2>
+        <div class="chat-window">
+            <div class="message user">用户: 请帮我撰写一条关于新品发布的推文。</div>
+            <div class="message ai">Autopush AI: 好的，这是一个初稿: “很高兴宣布我们的新品发布，敬请期待更多细节！”</div>
+            <div class="message user">用户: 能否让语气更活泼一点？</div>
+            <div class="message ai">Autopush AI: 没问题！“🎉 我们的新产品现已上线，快来体验创新科技的魅力！”</div>
+        </div>
+    </div>
+</section>
+
+<!-- 用户推荐 / KOL 评价轮播 -->
+<section id="testimonials">
+    <div class="container">
+        <h2>用户推荐</h2>
+        <div class="testimonials-container">
+            <!-- 推荐1 -->
+            <div class="testimonial-item">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像" class="avatar" />
+                <p class="testimonial-text">“Autopush 大大节省了我们的运营时间，粉丝互动率提高了 50%！”</p>
+                <p class="testimonial-author">某科技公司 市场总监</p>
+            </div>
+            <!-- 推荐2 -->
+            <div class="testimonial-item">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="用户头像" class="avatar" />
+                <p class="testimonial-text">“有了 Autopush，我的内容产出效率提升了 3 倍，再也不用熬夜赶内容了。”</p>
+                <p class="testimonial-author">知名推特博主</p>
+            </div>
+            <!-- 推荐3 -->
+            <div class="testimonial-item">
+                <img src="https://randomuser.me/api/portraits/women/66.jpg" alt="用户头像" class="avatar" />
+                <p class="testimonial-text">“Autopush 让运营推特变得前所未有的简单，高效又省心。”</p>
+                <p class="testimonial-author">社交媒体专家</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 底部强CTA 区域 -->
+<section id="cta-section">
+    <h2>准备好开启智能运营了吗？</h2>
+    <p>立即免费试用 Autopush，抢占社交媒体先机！</p>
+    <a href="#" class="cta-button">免费注册</a>
+</section>
+
+<!-- JS 脚本区域 -->
+<script>
+    /* 粒子背景动画 (纯JS，无第三方库) */
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = 60;          // 粒子数量
+    const maxDist = 120;              // 连线的最大距离
+    // 初始化粒子
+    function initParticles() {
+        particles = [];
+        resizeCanvas();
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 1.5,  // 横向速度
+                vy: (Math.random() - 0.5) * 1.5   // 纵向速度
+            });
+        }
+    }
+    // 调整画布尺寸
+    function resizeCanvas() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // 绘制动画每一帧
+    function drawParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // 绘制粒子连线
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < maxDist) {
+                    ctx.globalAlpha = 1 - dist / maxDist;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        ctx.globalAlpha = 1;
+        // 绘制粒子点
+        ctx.fillStyle = '#fff';
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2.5, 0, 2 * Math.PI);
+            ctx.fill();
+            // 移动粒子位置 (循环移动，越界则从另一侧出现)
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0) p.x += canvas.width;
+            if (p.x > canvas.width) p.x -= canvas.width;
+            if (p.y < 0) p.y += canvas.height;
+            if (p.y > canvas.height) p.y -= canvas.height;
+        });
+        requestAnimationFrame(drawParticles);
+    }
+    // 启动粒子动画
+    initParticles();
+    requestAnimationFrame(drawParticles);
+
+    /* 滚动触发的动画效果 (元素滑入/渐显) */
+    function revealOnScroll() {
+        const revealElems = document.querySelectorAll('.reveal, .feature-item, .message');
+        revealElems.forEach(elem => {
+            const rect = elem.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.85) {
+                elem.classList.add('active');
+            }
+        });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+
+    /* 用户推荐轮播效果 */
+    const testimonials = document.querySelectorAll('.testimonial-item');
+    let testimonialIndex = 0;
+    function showTestimonial(index) {
+        testimonials.forEach((item, i) => {
+            item.classList.remove('active');
+            if (i === index) {
+                item.classList.add('active');
+            }
+        });
+    }
+    // 初始化显示第一个推荐
+    if (testimonials.length > 0) {
+        showTestimonial(testimonialIndex);
+        // 每5秒轮换一次推荐内容
+        setInterval(() => {
+            testimonialIndex = (testimonialIndex + 1) % testimonials.length;
+            showTestimonial(testimonialIndex);
+        }, 5000);
+    }
+</script>
 </body>
 </html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户协议</title>
+    <link rel="stylesheet" href="/app/signin/npm/@arco-design/web-vue@2.53.2/arco.css">
+    <script src="/app/signin/npm/vue/3.3.8/vue.global.min.js"></script>
+
+    <script src="/app/signin/npm/@arco-design/web-vue@2.53.2/arco-vue.js"></script>
+    <script src="/app/signin/npm/@arco-design/web-vue@2.53.2/arco-vue-icon.min.js"></script>
+    <script src="/app/signin/npm/axios@1.6.2/dist/axios.js"></script>
+
+    <link href="/app/signin/css/theme.css" rel="stylesheet">
+</head>
+<body>
+<div id="agreement" class="agreement">
+    <h1>用户协议</h1>
+
+    <div class="content">
+        <p><?=$header?></p>
+
+        <ol>
+            <?php foreach (explode("\n", $body) as $value) { ?>
+            <li><?=$value?></li>
+            <?php } ?>
+        </ol>
+
+        <p><?=$footer?></p>
+    </div>
+</div>
+</body>
+<script>
+    const { defineComponent, ref, reactive,nextTick, computed, watch, onMounted, onBeforeUnmount, onUpdated, } = Vue
+    const app = Vue.createApp({
+        data() {
+            return {
+                agreement: '',
+            }
+        },
+        mounted(){},
+        methods: {
+            getAgreement(){
+                axios.get('/login/agreement').then(res=>{
+                    this.agreement = res.data;
+                })
+            }
+        },
+    });
+    app.use(ArcoVue).use(ArcoVueIcon);
+    app.mount("#agreement");
+</script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .content {
+        line-height: 32px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    ol {
+        padding-left: 20px;
+
+    }
+
+    ol li {
+        margin-bottom: 10px;
+    }
+
+    p {
+        margin-top: 20px;
+    }
+</style>
+</html>

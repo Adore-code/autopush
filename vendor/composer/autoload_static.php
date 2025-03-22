@@ -16,12 +16,12 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         'f625ee536139dfb962a398b200bdb2bd' => __DIR__ . '/..' . '/illuminate/support/functions.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
-        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'd2136ff22b54ac75cd96a40e0022218e' => __DIR__ . '/..' . '/workerman/webman-framework/src/support/helpers.php',
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
         'f88f8987adfe3f7cf9978fa9a9d148bc' => __DIR__ . '/..' . '/workerman/psr7/src/functions_include.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'ef65a1626449d89d0811cf9befce46f0' => __DIR__ . '/..' . '/illuminate/events/functions.php',
         '7448f3465e10b5f033e4babb31eb0b06' => __DIR__ . '/..' . '/topthink/think-orm/src/helper.php',
         '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
@@ -80,6 +80,10 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
             'Psr\\Container\\' => 14,
             'Psr\\Clock\\' => 10,
         ),
+        'N' => 
+        array (
+            'Noweh\\TwitterApi\\' => 17,
+        ),
         'M' => 
         array (
             'Monolog\\' => 8,
@@ -102,6 +106,7 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         ),
         'G' => 
         array (
+            'GuzzleHttp\\Subscriber\\Oauth\\' => 28,
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
@@ -116,6 +121,7 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         ),
         'C' => 
         array (
+            'Composer\\CaBundle\\' => 18,
             'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
         ),
@@ -126,6 +132,7 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         'A' => 
         array (
             'App\\' => 4,
+            'Abraham\\TwitterOAuth\\' => 21,
         ),
     );
 
@@ -142,8 +149,8 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         'support\\' => 
         array (
             0 => __DIR__ . '/..' . '/webman/database/src/support',
-            1 => __DIR__ . '/..' . '/workerman/webman-framework/src/support',
-            2 => __DIR__ . '/..' . '/webman/think-orm/src/support',
+            1 => __DIR__ . '/..' . '/webman/think-orm/src/support',
+            2 => __DIR__ . '/..' . '/workerman/webman-framework/src/support',
         ),
         'app\\View\\Components\\' => 
         array (
@@ -259,6 +266,10 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         array (
             0 => __DIR__ . '/..' . '/psr/clock/src',
         ),
+        'Noweh\\TwitterApi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/noweh/twitter-api-v2-php/src',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -306,6 +317,10 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         array (
             0 => __DIR__ . '/..' . '/illuminate/bus',
         ),
+        'GuzzleHttp\\Subscriber\\Oauth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/oauth-subscriber/src',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -326,6 +341,10 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector',
         ),
+        'Composer\\CaBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
+        ),
         'Carbon\\Doctrine\\' => 
         array (
             0 => __DIR__ . '/..' . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine',
@@ -341,6 +360,10 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
+        ),
+        'Abraham\\TwitterOAuth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/abraham/twitteroauth/src',
         ),
     );
 

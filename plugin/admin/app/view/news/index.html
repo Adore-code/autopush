@@ -15,9 +15,16 @@
                 <form class="layui-form top-search-from">
                     
                     <div class="layui-form-item">
-                        <label class="layui-form-label">主键</label>
+                        <label class="layui-form-label">ID</label>
                         <div class="layui-input-block">
                             <input type="number" name="id" value="" class="layui-input">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">来源</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="source" value="" class="layui-input">
                         </div>
                     </div>
                     
@@ -110,16 +117,9 @@
 						type: "checkbox",
 						align: "center"
 					},{
-						title: "主键",align: "center",
+						title: "ID",align: "center",
 						field: "id",
 						sort: true,
-					},{
-						title: "创建时间",align: "center",
-						field: "created_at",
-						sort: true,
-					},{
-						title: "更新时间",align: "center",
-						field: "updated_at",
 					},{
 						title: "标题",align: "center",
 						field: "title",
@@ -135,9 +135,30 @@
 					},{
 						title: "新闻ID",align: "center",
 						field: "new_id",
+						hide: true,
 					},{
 						title: "来源",align: "center",
 						field: "source",
+					},{
+						title: "发布时间",align: "center",
+						field: "public_at",
+						hide: true,
+					},{
+						title: "创建时间",align: "center",
+						field: "created_at",
+						sort: true,
+					},{
+						title: "更新时间",align: "center",
+						field: "updated_at",
+						hide: true,
+					},{
+						title: "图片连接",align: "center",
+						field: "img_url",
+						hide: true,
+					},{
+						title: "base_link",align: "center",
+						field: "base_link",
+						hide: true,
 					},{
 						title: "操作",
 						toolbar: "#table-bar",
