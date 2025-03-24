@@ -65,14 +65,20 @@ class TAccountController extends Crud
 
             $message = '发送失败！请仔细检查API是否填写正确！';
             $response = [];
+            $code     = 1;
             if($content)  $response = $twitter->createTweet($settings, $content);
             if($response)
             {
                 if(isset($response->status))   $message = $response->detail;
-                if(isset($response->data->id)) $message = "发送成功！ 推文链接：https://x.com/ahei750513/status/".$response->data->id;
+                if(isset($response->data->id))
+                {
+                    $code = 0;
+                    $message = "发送成功！ 推文链接：https://x.com/ahei750513/status/".$response->data->id;
+                    TAccount::where('id', $accountID)->update(['status' => '1']);
+                }
             }
 
-            return $this->json(1, $message);
+            return $this->json($code, $message);
         }
         return view('t-account/test');
     }
@@ -94,7 +100,13 @@ class TAccountController extends Crud
     public function getXAccounts(): Response
     {
         $user_id = admin_id();
-        $accounts = TAccount::where(['user_id' => $user_id, 'deleted' => 0])->pluck('x_account', 'id')->toArray();
+        $where = [
+            'user_id' => $user_id,
+            'deleted' => 0,
+            'status'  => 1
+        ];
+
+        $accounts = TAccount::where($where)->pluck('x_account', 'id')->toArray();
         $items = [];
         foreach ($accounts as $key => $account) {
             $items[] = [

@@ -5,7 +5,7 @@ namespace plugin\admin\app\controller;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use plugin\admin\app\common\Util;
-use process\Monitor;
+use app\process\Monitor;
 use support\exception\BusinessException;
 use support\Log;
 use support\Request;

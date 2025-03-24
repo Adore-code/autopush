@@ -21,10 +21,10 @@ return [
                 // 连接超时3秒
                 \PDO::ATTR_TIMEOUT => 3,
             ],
-            // 数据库编码默认采用utf8
-            'charset' => 'utf8',
             // 数据库表前缀
             'prefix' => '',
+            'charset'   => 'utf8mb4',
+            'collation' => 'utf8mb4_general_ci',
             // 断线重连
             'break_reconnect' => true,
             // 自定义分页类

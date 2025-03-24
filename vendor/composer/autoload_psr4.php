@@ -13,6 +13,7 @@ return array(
     'app\\' => array($baseDir . '/app'),
     'Workerman\\Psr7\\' => array($vendorDir . '/workerman/psr7/src'),
     'Workerman\\Http\\' => array($vendorDir . '/workerman/http-client/src'),
+    'Workerman\\Crontab\\' => array($vendorDir . '/workerman/crontab/src'),
     'Workerman\\Coroutine\\' => array($vendorDir . '/workerman/coroutine/src'),
     'Workerman\\' => array($vendorDir . '/workerman/coroutine/src', $vendorDir . '/workerman/workerman/src'),
     'Webman\\ThinkOrm\\' => array($vendorDir . '/webman/think-orm/src'),

@@ -49,6 +49,7 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         array (
             'Workerman\\Psr7\\' => 15,
             'Workerman\\Http\\' => 15,
+            'Workerman\\Crontab\\' => 18,
             'Workerman\\Coroutine\\' => 20,
             'Workerman\\' => 10,
             'Webman\\ThinkOrm\\' => 16,
@@ -167,6 +168,10 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         'Workerman\\Http\\' => 
         array (
             0 => __DIR__ . '/..' . '/workerman/http-client/src',
+        ),
+        'Workerman\\Crontab\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/workerman/crontab/src',
         ),
         'Workerman\\Coroutine\\' => 
         array (

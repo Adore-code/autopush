@@ -3289,6 +3289,59 @@
             "install-path": "../workerman/coroutine"
         },
         {
+            "name": "workerman/crontab",
+            "version": "v1.0.7",
+            "version_normalized": "1.0.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/walkor/crontab.git",
+                "reference": "74f51ca8204e8eb628e57bc0e640561d570da2cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/walkor/crontab/zipball/74f51ca8204e8eb628e57bc0e640561d570da2cb",
+                "reference": "74f51ca8204e8eb628e57bc0e640561d570da2cb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0",
+                "workerman/workerman": ">=4.0.20"
+            },
+            "time": "2025-01-15T07:20:50+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Workerman\\Crontab\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "walkor",
+                    "email": "walkor@workerman.net",
+                    "homepage": "http://www.workerman.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A crontab written in PHP based on workerman",
+            "homepage": "http://www.workerman.net",
+            "keywords": [
+                "crontab"
+            ],
+            "support": {
+                "email": "walkor@workerman.net",
+                "forum": "http://wenda.workerman.net/",
+                "issues": "https://github.com/walkor/workerman/issues",
+                "source": "https://github.com/walkor/crontab",
+                "wiki": "http://doc.workerman.net/"
+            },
+            "install-path": "../workerman/crontab"
+        },
+        {
             "name": "workerman/http-client",
             "version": "v2.2.9",
             "version_normalized": "2.2.9.0",

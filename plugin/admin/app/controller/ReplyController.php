@@ -4,19 +4,18 @@ namespace plugin\admin\app\controller;
 
 use support\Request;
 use support\Response;
-use plugin\admin\app\model\Task;
+use plugin\admin\app\model\Reply;
 use plugin\admin\app\controller\Crud;
 use support\exception\BusinessException;
-use support\think\Db;
 
 /**
- * 我的任务 
+ * AI回复 
  */
-class TaskController extends Crud
+class ReplyController extends Crud
 {
     
     /**
-     * @var Task
+     * @var Reply
      */
     protected $model = null;
 
@@ -26,7 +25,7 @@ class TaskController extends Crud
      */
     public function __construct()
     {
-        $this->model = new Task;
+        $this->model = new Reply;
     }
     
     /**
@@ -35,7 +34,7 @@ class TaskController extends Crud
      */
     public function index(): Response
     {
-        return view('task/index');
+        return view('reply/index');
     }
 
     /**
@@ -47,18 +46,9 @@ class TaskController extends Crud
     public function insert(Request $request): Response
     {
         if ($request->method() === 'POST') {
-            // 获取要插入的账号
-            $xAccount = $request->post('x_account');
-
-            // 检查数据库中是否已存在相同账号
-            $exists = Db::name('wa_task')->where('x_account', $xAccount)->find();
-            if ($exists) {
-                throw new BusinessException('该推特账号已存在，请勿重复添加');
-            }
-
             return parent::insert($request);
         }
-        return view('task/insert');
+        return view('reply/insert');
     }
 
     /**
@@ -72,7 +62,7 @@ class TaskController extends Crud
         if ($request->method() === 'POST') {
             return parent::update($request);
         }
-        return view('task/update');
+        return view('reply/update');
     }
 
 }

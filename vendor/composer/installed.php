@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'workerman/webman',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '9c2979415d4c70f20d55d8dd87993ee7584fea16',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -508,6 +508,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'workerman/crontab' => array(
+            'pretty_version' => 'v1.0.7',
+            'version' => '1.0.7.0',
+            'reference' => '74f51ca8204e8eb628e57bc0e640561d570da2cb',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../workerman/crontab',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'workerman/http-client' => array(
             'pretty_version' => 'v2.2.9',
             'version' => '2.2.9.0',
@@ -527,9 +536,9 @@
             'dev_requirement' => false,
         ),
         'workerman/webman' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '9c2979415d4c70f20d55d8dd87993ee7584fea16',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
