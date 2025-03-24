@@ -72,6 +72,11 @@
       <path value="$PROJECT_DIR$/vendor/noweh/twitter-api-v2-php" />
       <path value="$PROJECT_DIR$/vendor/guzzlehttp/oauth-subscriber" />
       <path value="$PROJECT_DIR$/vendor/workerman/crontab" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/vendor/graham-campbell/result-type" />
+      <path value="$PROJECT_DIR$/vendor/vlucas/phpdotenv" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

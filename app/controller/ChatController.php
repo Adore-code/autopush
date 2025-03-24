@@ -150,22 +150,23 @@ class ChatController
                 $data = [
                     'ai_content' => $aiReply['reply'],
                     'status' => $status,
+                    'updated_at' => date('Y-m-d H:i:s', time()),
                 ];
 
                 Db::name('wa_reply')->where('id', '=', $wait['id'])->data($data)->update();
-                $data = [
-                    'x_account' => $wait['x_account'],
-                    'source_content' => $wait['source_content'],
-                    'ai_content' => $aiReply['reply'],
-                    'status' => 0,
-                    'created_at' => date('Y-m-d H:i:s',time()),
-                    'public_at' => $wait['public_at'],
-                ];
-                Db::name('wa_article')->insert($data);
+                if($status ==1) {
+                    $data = [
+                        'x_account' => $wait['x_account'],
+                        'source_content' => $wait['source_content'],
+                        'ai_content' => $aiReply['reply'],
+                        'status' => 0,
+                        'created_at' => date('Y-m-d H:i:s', time()),
+                        'public_at' => $wait['public_at'],
+                    ];
+                    Db::name('wa_article')->insert($data);
+                }
                 Db::commit();
             } catch (DbException $e) {
-                print_r($e->getMessage());
-                print_r($e->getTraceAsString());
                 Db::rollback();
             }
 

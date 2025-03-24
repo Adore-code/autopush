@@ -22,6 +22,8 @@ return array(
     '9b552a3cc426e3287cc811caefa3cf53' => $vendorDir . '/topthink/think-helper/src/helper.php',
     'f88f8987adfe3f7cf9978fa9a9d148bc' => $vendorDir . '/workerman/psr7/src/functions_include.php',
     'ef65a1626449d89d0811cf9befce46f0' => $vendorDir . '/illuminate/events/functions.php',
+    '320cde22f66dd4f5d3fd621d3e88b98f' => $vendorDir . '/symfony/polyfill-ctype/bootstrap.php',
+    'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     '7448f3465e10b5f033e4babb31eb0b06' => $vendorDir . '/topthink/think-orm/src/helper.php',
     '35fab96057f1bf5e7aba31a8a6d5fdde' => $vendorDir . '/topthink/think-orm/stubs/load_stubs.php',
 );
