@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AI通行证 - 注册</title>
+    <link href="/app/user/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/app/autopush/css/login.css"/>
+    <script src="/app/user/js/jquery.min.js"></script>
+    <script src="/app/user/js/bootstrap.bundle.min.js"></script>
+    <script src="/app/user/js/webman.js"></script>
+</head>
+<body>
+<div class="logo">你的专属 AI | <span class="highlight">通行证</span></div>
+
+<div class="bg">
+    <div class="login-box">
+        <h1>注册</h1>
+        <p class="sub-title">私有的人工智能大模型平台</p>
+        <form method="post">
+            <input type="text" name="username" placeholder="请输入用户名" />
+
+            <div class="password-wrapper">
+                <input type="password" id="password" name="password" placeholder="请输入密码" />
+                <span class="toggle-eye" onclick="togglePassword()">👁</span>
+            </div>
+
+            <input type="password" name="repassword" placeholder="请重复密码" />
+
+            <input type="text" name="invite_code" placeholder="邀请码（可选）" />
+
+            <div class="captcha-wrapper">
+                <input type="text" name="captcha" placeholder="验证码" />
+                <img id="captcha-img" src="/app/autopush/auth/captcha/register" title="点击刷新" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block w-100">注册</button>
+        </form>
+
+        <div class="bottom-links">
+            已有账号？<a id="loginLink" href="/app/autopush/auth/login">点这里登录</a>
+            <span class="float-end"><a href="#">忘记密码</a></span>
+        </div>
+
+        <div class="agreement">
+            登录或注册即代表同意 <a href="#">用户协议</a><br/>
+            未满18周岁未成年人请勿自行注册、登录和使用服务需征得监护人同意
+        </div>
+    </div>
+</div>
+
+<script>
+    // 点击验证码刷新
+    $('form img').on('click', function (e) {
+        e.preventDefault();
+        $(this).attr('src', '/app/autopush/auth/captcha/register?v=' + Math.random());
+        $('input[name="captcha"]').val('');
+    });
+
+    // 密码显示/隐藏
+    function togglePassword() {
+        const pwdInput = document.getElementById("password");
+        const eyeIcon = document.querySelector(".toggle-eye");
+
+        if (pwdInput.type === "password") {
+            pwdInput.type = "text";
+            eyeIcon.textContent = "🙈";
+        } else {
+            pwdInput.type = "password";
+            eyeIcon.textContent = "👁";
+        }
+    }
+
+    // 清除错误样式
+    $('input').on('input', function () {
+        $(this).removeClass('is-invalid');
+    });
+
+    // 提交注册表单
+    $('form').submit(function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: "/app/autopush/auth/register",
+            type: "POST",
+            dataType: 'json',
+            data: $(this).serialize(),
+            success: function (e) {
+                if (e.code !== 0) {
+                    let field = e.data ? e.data.field : false;
+
+                    // 刷新验证码除非是验证码字段错误
+                    field !== 'captcha' && $('#captcha-img').trigger('click');
+
+                    // 高亮错误字段
+                    field && $('input[name="' + field + '"]').addClass('is-invalid').focus();
+
+                    return webman.error(e.msg);
+                }
+
+                webman.success('注册成功', function () {
+                    location.href = "/app/autopush/auth/login";
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

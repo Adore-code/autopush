@@ -38,6 +38,25 @@ class TaskController extends Crud
         return view('task/index');
     }
 
+    public function select(Request $request): Response
+    {
+        $user_id  = admin_id();
+        [$where, $format, $limit, $field, $order] = $this->selectInput($request);
+
+        // 查询当前用户的推特账号
+        $where['user_id'] = ['=', $user_id];
+        if(empty($field))
+        {
+            $field = 'id';
+            $order = 'desc';
+        }
+        $query = $this->doSelect($where, $field, $order);
+        $paginator = $query->paginate($limit);
+        $items = $paginator->items();
+
+        return json(['code' => 0, 'msg' => 'ok', 'count' => $paginator->total(), 'data' => $items]);
+    }
+
     /**
      * 插入
      * @param Request $request

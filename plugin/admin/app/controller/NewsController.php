@@ -51,6 +51,23 @@ class NewsController extends Crud
         return view('news/insert');
     }
 
+    public function select(Request $request): Response
+    {
+        [$where, $format, $limit, $field, $order] = $this->selectInput($request);
+
+        // 查询当前用户的推特账号
+        if(empty($field))
+        {
+            $field = 'id';
+            $order = 'desc';
+        }
+        $query = $this->doSelect($where, $field, $order);
+        $paginator = $query->paginate($limit);
+        $items = $paginator->items();
+
+        return json(['code' => 0, 'msg' => 'ok', 'count' => $paginator->total(), 'data' => $items]);
+    }
+
     /**
      * 更新
      * @param Request $request

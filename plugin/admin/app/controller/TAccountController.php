@@ -90,11 +90,31 @@ class TAccountController extends Crud
 
         // 查询当前用户的推特账号
         $where['user_id'] = ['=', $user_id];
+        if(empty($field))
+        {
+            $field = 'id';
+            $order = 'desc';
+        }
         $query = $this->doSelect($where, $field, $order);
         $paginator = $query->paginate($limit);
         $items = $paginator->items();
 
         return json(['code' => 0, 'msg' => 'ok', 'count' => $paginator->total(), 'data' => $items]);
+    }
+
+    public function getXAccountsByAdmin(): array
+    {
+        $user_id = admin_id();
+        $where = [
+            'user_id' => $user_id,
+        ];
+
+        $accounts = TAccount::where($where)->pluck('x_account', 'id')->toArray();
+        $items = [];
+        foreach ($accounts as $key => $account) {
+            $items[$account] = $account;
+        }
+        return $items;
     }
 
     public function getXAccounts(): Response

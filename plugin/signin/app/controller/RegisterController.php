@@ -2,7 +2,7 @@
 
 namespace plugin\signin\app\controller;
 
-use plugin\user\api\FormException;
+use plugin\signin\app\service\Config;
 use plugin\user\app\service\Register;
 use support\Response;
 
@@ -16,30 +16,28 @@ class RegisterController extends Base
     
     public function index(): Response
     {
-        return \response('404', 404);
         $register = Register::getSetting();
 
         if (empty($register['register_enable'])) {
             return view('register-close');
         }
 
-        $beian = $this->config->getPluginLoginConfig('setting','beian', '');
+        $beian = Config::get('setting.beian', '');
         $matches = [];
         if (!empty($beian)){
             preg_match('/\d+/', $beian, $matches);
         }
         return view('register', [
             'settings' => $register,
-            'show_list' => $this->config->getPluginLoginConfig('register','show_list',''),
-            'main_title' => $this->config->getPluginLoginConfig('register','main_title',''),
-            'subtitle' => $this->config->getPluginLoginConfig('register','subtitle',''),
-            'logo_text' => $this->config->getPluginLoginConfig('register','logo_text',''),
+            'show_list'  => Config::get('register.show_list',[]),
+            'main_title' => Config::get('register.main_title',''),
+            'subtitle'   => Config::get('register.subtitle',''),
+            'logo_text'  => Config::get('register.logo_text',''),
 
-            'footer_html' => $this->config->getPluginLoginConfig('setting','footer_html',''),
-            'icp' => $this->config->getPluginLoginConfig('setting','icp',''),
+            'footer_html' => Config::get('setting.footer_html',''),
+            'icp' => Config::get('setting.icp',''),
             'beian' => $beian,
             'beian_number' => $matches[0] ?? '',
         ]);
-
     }
 }

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
-    <meta name="viewport" content="width=device-width,   initial-scale=1.0,   user-scalable=no,   minimum-scale=1.0   maximum-scale=1.0"/>
+    <meta name="viewport"
+          content="width=device-width,   initial-scale=1.0,   user-scalable=no,   minimum-scale=1.0   maximum-scale=1.0"/>
 
     <link rel="stylesheet" href="/app/signin/npm/@arco-design/web-vue@2.53.2/arco.css">
     <link rel="stylesheet" href="/app/signin/css/theme.css">
@@ -30,6 +31,12 @@
             background: url('<?=$backgroundImage?>') no-repeat center center fixed;
             background-size: cover;
         }
+
+        .container .login-container .login-body .login-logo {
+            color: rgb(var(--primary-6));
+            margin: 0 0 32px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -39,71 +46,51 @@
             <div class="login-header-nav"><?php if(in_array('logo_text', $show_list)){ ?><?=$logo_text?><?php } ?></div>
         </div>
         <div class="login-body">
-            <div class="login-logo">
-                <div class="login-logo-title"><?php if(in_array('main_title', $show_list)){ ?><?=$main_title?><?php } ?></div>
-                <div class="login-logo-desc"><?php if(in_array('subtitle', $show_list)){ ?><?=$subtitle?><?php } ?></div>
-            </div>
             <div class="login-box">
                 <div class="login-form-box">
                     <!--开始-->
                     <div id="from-container" class="from-container">
-                        <div></div>
+                        <div class="login-logo">
+                            <div class="login-logo-title"><?php if(in_array('main_title', $show_list)){ ?><?=$main_title?><?php } ?></div>
+                            <div class="login-logo-desc"><?php if(in_array('subtitle', $show_list)){ ?><?=$subtitle?><?php } ?></div>
+                        </div>
                         <div class="from-tabs">
                             <!-- 登录表单 -->
-                            <a-tabs size="large" default-active-key="2">
-                                <a-tab-pane key="1" title="短信登录">
-                                    <form  class="from-info from-sms">
-                                        <div class="from-entry">
-                                            <a-input-group style="width: 100%">
-                                                <div><a-select size="large" :options="['+1','+86']" :disabled="true" v-model="smsLogin.regionCode" style="width: 90px;" /></div>
-                                                <div style="flex: 1"><a-input v-model="smsLogin.mobile" size="large" placeholder="手机号" /></div>
-                                            </a-input-group>
+                            <form class="from-info from-password">
+                                <div class="from-entry">
+                                    <a-input v-model="loginInfo.username" size="large" placeholder="账号" allow-clear/>
+                                </div>
+                                <div class="from-entry">
+                                    <a-input-password v-model="loginInfo.password" size="large" placeholder="密码"
+                                                      allow-clear></a-input-password>
+                                </div>
+                                <div class="from-entry">
+                                    <div style="display: flex;flex-direction: row;">
+                                        <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="captcha.code" /></div>
+                                        <div @click="rounded()" style="border: 1px solid transparent;cursor:pointer;">
+                                            <a-image :height="31" :src="imageCodeUrl" :show-loader="true" :preview="false" />
                                         </div>
-                                        <div class="from-entry" v-if="smsLogin.index === 1">
-                                            <a-input-group style="width: 100%">
-                                                <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="smsLogin.code" /></div>
-                                                <div style="border: 1px solid transparent;cursor:pointer;">
-                                                    <a-button type="primary" v-if="smsLogin.countdown > 0" disabled>{{ smsLogin.countdown }}秒</a-button>
-                                                    <a-button type="primary" v-else @click="smsNext()">重发</a-button>
-                                                </div>
-                                            </a-input-group>
-                                        </div>
-                                        <div class="from-entry" v-if="smsLogin.index === 0">
-                                            <a-button size="large" type="primary" style="width: 100%;" @click="smsNext()">下一步</a-button>
-                                        </div>
-                                        <div class="from-entry" v-else-if="smsLogin.index === 1">
-                                            <a-button size="large" type="primary" style="width: 100%;" :loading="loginButtonStatus.smsLogin" @click="loginSms()">登录</a-button>
-                                        </div>
-                                        <div class="from-entry from-login-tool">
-                                            <div class="from-more">
-                                                <span @click="forgetPassword()">忘记密码</span>
-                                                <span> &nbsp;|&nbsp; </span>
-                                                <span @click="register()">注册</span>
-                                            </div>
-                                        </div>
-                                    </form >
-                                </a-tab-pane>
-                                <a-tab-pane key="2" title="密码登录">
-                                    <form  class="from-info from-password">
-                                        <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="账号" allow-clear /></div>
-                                        <div class="from-entry"><a-input-password v-model="loginInfo.password"  size="large" placeholder="密码" allow-clear /></div>
-                                        <div class="from-entry">
-                                            <a-button size="large" type="primary" :loading="loginButtonStatus.login" style="width: 100%;" @click="loginCaptcha()">登录</a-button>
-                                        </div>
-                                        <div class="from-entry from-login-tool">
-                                            <div class="from-more">
-                                                <span @click="forgetPassword()">忘记密码</span>
-                                                <span> &nbsp;|&nbsp; </span>
-                                                <span @click="register()">注册</span>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </a-tab-pane>
-                            </a-tabs>
+                                    </div>
+                                </div>
+                                <div class="from-entry">
+                                    <a-button size="large" type="primary" :loading="loginButtonStatus.login"
+                                              style="width: 100%;" @click="loginCaptcha()">登录
+                                    </a-button>
+                                </div>
+                                <div class="from-entry from-login-tool">
+                                    <div class="from-more">
+                                        <span @click="forgetPassword()">忘记密码</span>
+                                        <span> &nbsp;|&nbsp; </span>
+                                        <span @click="register()">注册</span>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                         <div class="ouh"></div>
                         <div class="tip-button">
-                            <p>登录或注册即代表同意 <a-link @click="readAgreement()" style="font-size: 10px;">用户协议</a-link></p>
+                            <p>登录或注册即代表同意
+                                <a-link @click="readAgreement()" style="font-size: 10px;">用户协议</a-link>
+                            </p>
                             <p>未满18周岁未成年人请勿自行注册，其注册、登录账号及使用服务需征得监护人同意</p>
                         </div>
                     </div>
@@ -112,11 +99,15 @@
             </div>
             <div class="login-footer">
                 <?php if($icp){ ?>
-                <div><a-link target="_blank" :hoverable="false" style="color: #ffffff;font-size: 12px;" href="http://beian.miit.gov.cn/"><?=$icp?></a-link></div>
+                <div>
+                    <a-link target="_blank" :hoverable="false" style="color: #ffffff;font-size: 12px;"
+                            href="http://beian.miit.gov.cn/"><?=$icp?></a-link>
+                </div>
                 <?php } ?>
                 <?php if($beian){ ?>
                 <div>
-                    <a-link target="_blank" :hoverable="false" style="color: #ffffff;font-size: 12px;" :href="'https://beian.mps.gov.cn/#/query/webSearch?code=<?=$beian_number?>'">
+                    <a-link target="_blank" :hoverable="false" style="color: #ffffff;font-size: 12px;"
+                            :href="'https://beian.mps.gov.cn/#/query/webSearch?code=<?=$beian_number?>'">
                         <div style="display: flex;flex-direction: row;justify-content: center;">
                             <img style="width: 14px" src="/app/signin/image/beian.png">
                             <div style="margin-left: 4px;"><?=$beian?></div>
@@ -129,9 +120,11 @@
                 <?php } ?>
             </div>
         </div>
-        <a-modal :visible="agreement.visible" width="800px" :mask-closable="false" @ok="handleAgreementOk" @cancel="handleAgreementCancel" :closable="false" :hide-cancel="true" title="阅读用户协议">
+        <a-modal :visible="agreement.visible" width="800px" :mask-closable="false" @ok="handleAgreementOk"
+                 @cancel="handleAgreementCancel" :closable="false" :hide-cancel="true" title="阅读用户协议">
             <div style="width: 100%; height: 600px;">
-                <iframe id="bi_iframe" style="width: 100%; height: 100%;" src="/app/signin/agreement"  frameborder="0" scrolling="auto"></iframe>
+                <iframe id="bi_iframe" style="width: 100%; height: 100%;" src="/app/signin/agreement" frameborder="0"
+                        scrolling="auto"></iframe>
             </div>
         </a-modal>
     </div>

@@ -67,16 +67,9 @@
                     </div>
                     
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">ai角色扮演</label>
-                        <div class="layui-input-block">
-                            <textarea id="x_ai_user" name="x_ai_user" required lay-verify="required" class="layui-textarea"></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="layui-form-item">
                         <label class="layui-form-label required">ai描述模板</label>
                         <div class="layui-input-block">
-                            <textarea id="x_ai_template" name="x_ai_template" required lay-verify="required" class="layui-textarea"></textarea>
+                            <textarea id="x_ai_template" rows="10" name="x_ai_template" required lay-verify="required" class="layui-textarea"></textarea>
                         </div>
                     </div>
                     
@@ -199,20 +192,7 @@
                                 layui.$('input[name="x_limit"]').val(this.checked ? 1 : 0);
                             });
                         })
-                        
-                        // 字段 ai角色扮演 x_ai_user
-                        layui.use(["tinymce"], function() {
-                            var tinymce = layui.tinymce
-                            var edit = tinymce.render({
-                                elem: "#x_ai_user",
-                                'lay-verify': "required",
-                                images_upload_url: "/app/admin/upload/image",
-                            });
-                            edit.on("blur", function(){
-                                layui.$("#x_ai_user").val(edit.getContent());
-                            });
-                        });
-                        
+
                         // 字段 ai描述模板 x_ai_template
                         layui.use(["tinymce"], function() {
                             var tinymce = layui.tinymce

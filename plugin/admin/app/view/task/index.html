@@ -205,10 +205,6 @@
 						field: "x_kol_list",
 						hide: true,
 					},{
-						title: "ai角色扮演",align: "center",
-						field: "x_ai_user",
-						hide: true,
-					},{
 						title: "ai描述模板",align: "center",
 						field: "x_ai_template",
 						hide: true,
@@ -358,7 +354,7 @@
                         title: "新增",
                         shade: 0.1,
                         maxmin: true,
-                        area: [common.isModile()?"100%":"500px", common.isModile()?"100%":"450px"],
+                        area: [common.isModile()?"100%":"85%", common.isModile()?"100%":"85%"],
                         content: INSERT_URL
                     });
                 }
@@ -371,7 +367,7 @@
                         title: "修改",
                         shade: 0.1,
                         maxmin: true,
-                        area: [common.isModile()?"100%":"500px", common.isModile()?"100%":"450px"],
+                        area: [common.isModile()?"100%":"85%", common.isModile()?"100%":"85%"],
                         content: UPDATE_URL + "?" + PRIMARY_KEY + "=" + value
                     });
                 }

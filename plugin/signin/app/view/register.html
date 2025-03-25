@@ -39,43 +39,12 @@
 
                                 <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入用户名" allow-clear /></div>
                                 <?php if($settings['nickname_enable']){ ?>
-                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入昵称" allow-clear /></div>
+                                <div class="from-entry"><a-input v-model="loginInfo.nickname" size="large" placeholder="请输入昵称" allow-clear /></div>
                                 <?php } ?>
-                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入密码" allow-clear /></div>
-                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请重复密码" allow-clear /></div>
+                                <div class="from-entry"><a-input v-model="loginInfo.password" size="large" placeholder="请输入密码" allow-clear /></div>
+                                <div class="from-entry"><a-input v-model="loginInfo.password2" size="large" placeholder="请重复密码" allow-clear /></div>
+                                <div class="from-entry"><a-input v-model="loginInfo.invitation_code" size="large" placeholder="邀请码（可选）" allow-clear /></div>
 
-                                <?php if($settings['mobile_enable']){ ?>
-                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入手机号" allow-clear /></div>
-                                <?php if($settings['mobile_verify']){ ?>
-                                <div class="from-entry">
-                                    <a-input-group style="width: 100%">
-                                        <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="captcha.code" /></div>
-                                        <div @click="rounded()" style="border: 1px solid transparent;cursor:pointer;">
-                                            <a-button type="primary" v-if="captcha.mobileCountdown > 0" disabled>{{ captcha.mobileCountdown }}秒</a-button>
-                                            <a-button type="primary" v-else-if="captcha.mobileCountdown === null" @click="smsNext()">发送</a-button>
-                                            <a-button type="primary" v-else @click="smsNext()">重发</a-button>
-                                        </div>
-                                    </a-input-group>
-                                </div>
-                                <?php } ?>
-                                <?php } ?>
-
-
-                                <?php if($settings['email_enable']){ ?>
-                                <div class="from-entry"><a-input v-model="loginInfo.username" size="large" placeholder="请输入邮箱" allow-clear /></div>
-                                <?php if($settings['email_verify']){ ?>
-                                <div class="from-entry">
-                                    <a-input-group style="width: 100%">
-                                        <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="captcha.code" /></div>
-                                        <div @click="rounded()" style="border: 1px solid transparent;cursor:pointer;">
-                                            <a-button type="primary" v-if="captcha.emailCountdown > 0" disabled>{{ captcha.emailCountdown }}秒</a-button>
-                                            <a-button type="primary" v-else-if="captcha.emailCountdown === null" @click="smsNext()">发送</a-button>
-                                            <a-button type="primary" v-else @click="smsNext()">重发</a-button>
-                                        </div>
-                                    </a-input-group>
-                                </div>
-                                <?php } ?>
-                                <?php } ?>
                                 <?php if($settings['captcha_enable']){ ?>
                                 <div class="from-entry">
                                     <div style="display: flex;flex-direction: row;">
@@ -131,15 +100,6 @@
         <a-modal :visible="agreement.visible" width="800px" :mask-closable="false" @ok="handleAgreementOk" @cancel="handleAgreementCancel" :closable="false" :hide-cancel="true" title="阅读用户协议">
             <div style="width: 100%; height: 600px;">
                 <iframe id="bi_iframe" style="width: 100%; height: 100%;" src="/app/signin/agreement"  frameborder="0" scrolling="auto"></iframe>
-            </div>
-        </a-modal>
-        <a-modal :visible="captcha.visible" width="360px" :mask-closable="false" draggable @ok="handleCaptchaOk" @cancel="handleCaptchaCancel" :ok-loading="loginButtonStatus.captcha">
-            <template #title>确保你不是机器人</template>
-            <div style="display: flex;flex-direction: row;">
-                <div style="flex: 1;"><a-input style="width: 100%;" placeholder="验证码"v-model="captcha.code" /></div>
-                <div @click="rounded()" style="border: 1px solid transparent;cursor:pointer;">
-                    <a-image :height="31" :src="imageCodeUrl" :show-loader="true" :preview="false" />
-                </div>
             </div>
         </a-modal>
     </div>

@@ -33,16 +33,21 @@ class ChatController
             $accountIds[] = $task['x_account'];
         }
 
-        //获取最后一条推文
+        // 子查询：每个账号的最大发布时间
         $subQuery = Db::name('wa_article')
-            ->field('*, MAX(id) as max_id') // 或者 MAX(created_at)
+            ->field('x_account, MAX(public_at) as max_public')
             ->where('x_account', 'in', $accountIds)
             ->group('x_account')
             ->buildSql();
 
-        $lastArticle = Db::table($subQuery . ' sub')
+        // 主查询：拿到完整记录
+        $lastArticle = Db::name('wa_article')
+            ->alias('a')
+            ->join([$subQuery => 'b'], 'a.x_account = b.x_account AND a.public_at = b.max_public')
+            ->order('a.public_at', 'desc')
             ->select()
             ->toArray();
+
         // 按 x_account 为索引重建数组
         $lastArticles = array_column($lastArticle, null, 'x_account');
 
@@ -62,7 +67,7 @@ class ChatController
 
             if($lastArticle['status'] == 0) continue;
 
-            $publicTime  =  strtotime($lastArticle['public_at']);
+            $publicTime  = strtotime($lastArticle['public_at']);
             $now         = time();
 
             $push_interval = $account['push_interval'];

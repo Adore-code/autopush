@@ -1,0 +1,150 @@
+/* 背景与布局 */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    height: 100%;
+    background: url('/app/autopush/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* 左上角 Logo */
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    font-family: "Arial", sans-serif;
+    z-index: 1000;
+}
+.logo .highlight {
+    color: #ff5b5b;
+}
+
+.bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* 登录框 */
+.login-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 40px 30px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-box h2 , .login-box h1 {
+    margin-bottom: 10px;
+    color: #c89c3c;
+    font-size: 32px;
+}
+
+.sub-title {
+    font-size: 20px;
+    color: #b48c3f;
+    margin-bottom: 30px;
+}
+
+/* 输入框 */
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f2f3f5;
+    font-size: 15px;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* 验证码 */
+.captcha-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.captcha-wrapper input {
+    flex: 1;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f2f3f5;
+    font-size: 15px;
+}
+.captcha-wrapper img {
+    height: 42px;
+    width: 100px;
+    border-radius: 6px;
+    object-fit: cover;
+    margin-left: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+/* 登录按钮 */
+button[type="submit"] {
+    width: 100%;
+    background-color: #c89c3c;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+button[type="submit"]:hover {
+    background-color: #b2872f;
+}
+
+/* 底部链接与协议 */
+.bottom-links {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+.bottom-links a {
+    color: #666;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.agreement {
+    font-size: 12px;
+    color: #999;
+    margin-top: 15px;
+    line-height: 1.6;
+}
+.agreement a {
+    color: #337ab7;
+    text-decoration: none;
+}
+.is-invalid {
+    border: 1px solid #dc3545;
+    background-color: #fff0f0;
+}

@@ -37,6 +37,27 @@ class ArticleController extends Crud
         return view('article/index');
     }
 
+    public function select(Request $request): Response
+    {
+        $taccount = new TAccountController();
+        $x_account = $taccount->getXAccountsByAdmin();
+        $x_account = empty($x_account) ? '' : implode(',', $x_account);
+        [$where, $format, $limit, $field, $order] = $this->selectInput($request);
+
+        // 查询当前用户的推特账号
+        $where['x_account'] = ['in', $x_account];
+        if(empty($field))
+        {
+            $field = 'id';
+            $order = 'desc';
+        }
+        $query = $this->doSelect($where, $field, $order);
+        $paginator = $query->paginate($limit);
+        $items = $paginator->items();
+
+        return json(['code' => 0, 'msg' => 'ok', 'count' => $paginator->total(), 'data' => $items]);
+    }
+
     /**
      * 插入
      * @param Request $request

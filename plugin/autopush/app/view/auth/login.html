@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AI通行证 - 登录</title>
+    <link href="/app/user/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/app/autopush/css/login.css"/>
+    <script src="/app/user/js/jquery.min.js"></script>
+    <script src="/app/user/js/bootstrap.bundle.min.js"></script>
+    <script src="/app/user/js/webman.js"></script>
+</head>
+<body>
+<!-- 左上角 Logo -->
+<div class="logo">你的专属 AI | <span class="highlight">通行证</span></div>
+
+<div class="bg">
+    <div class="login-box">
+        <h1>登录</h1>
+        <p class="sub-title">私有的人工智能大模型平台</p>
+        <form method="post">
+            <input type="text" name="username" placeholder="账号"/>
+            <div class="password-wrapper">
+                <input type="password" id="password" name="password" placeholder="密码"/>
+                <span class="toggle-eye" onclick="togglePassword()">👁</span>
+            </div>
+            <div class="captcha-wrapper">
+                <input type="text" name="captcha" placeholder="验证码"/>
+                <img id="captcha-img" src="/app/user/captcha/image/login" title="点击刷新"/>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block w-100">登录</button>
+        </form>
+        <div class="bottom-links">
+            <a href="#">忘记密码</a>
+            <span>|</span>
+            <a href="/app/autopush/auth/register">注册</a>
+        </div>
+        <div class="agreement">
+            登录或注册即代表同意 <a href="javascript:void(0);" onclick="showAgreement()">用户协议</a>
+            <br/>
+            未满18周岁请勿自行注册、登录和使用服务
+        </div>
+    </div>
+</div>
+<!-- 用户协议弹窗 -->
+<div class="modal fade" id="userAgreementModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">用户协议</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭">x</button>
+            </div>
+            <div class="modal-body" id="agreement-content">
+                加载中...
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    function showAgreement() {
+        // 打开 Bootstrap 弹窗
+        const modal = new bootstrap.Modal(document.getElementById('userAgreementModal'));
+        modal.show();
+
+        // 清空旧内容，显示加载中
+        $('#agreement-content').html("加载中...");
+
+        // 异步加载内容
+        $.get('/app/autopush/auth/agreement', function (res) {
+            $('#agreement-content').html(res);
+        }).fail(function () {
+            $('#agreement-content').html("<p class='text-danger'>协议加载失败，请稍后再试。</p>");
+        });
+    }
+
+    function closeAgreement() {
+        document.getElementById('modal-mask').style.display = 'none';
+    }
+
+    $('form img').on('click', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $(this).attr('src', '/app/admin/account/captcha/login?v=' + Math.random());
+        $('input[name="captcha"]').val('');
+    });
+
+    function togglePassword() {
+        const pwdInput = document.getElementById("password");
+        const eyeIcon = document.querySelector(".toggle-eye");
+
+        if (pwdInput.type === "password") {
+            pwdInput.type = "text";
+            eyeIcon.textContent = "🙈"; // 你也可以换成 SVG 图标
+        } else {
+            pwdInput.type = "password";
+            eyeIcon.textContent = "👁";
+        }
+    }
+
+    $('input').keyup(function () {
+        $(this).removeClass('is-invalid');
+    });
+
+    $('form').submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: "/app/admin/account/login",
+            type: "POST",
+            dataType: 'json',
+            data: $(this).serialize(),
+            success: function (e) {
+                if (e.code !== 0) {
+                    let field = e.data ? e.data.field : false;
+
+                    // 刷新验证码
+                    field !== 'captcha' && $('#captcha-img').trigger('click');
+
+                    // 高亮错误字段并 focus
+                    field && $('input[name="' + field + '"]').addClass('is-invalid').focus();
+
+                    return webman.error(e.msg);
+                }
+                webman.success('登录成功', function () {
+                    let url = new URL(window.location.href);
+                    let redirect = url.searchParams.get('redirect');
+                    location.href = redirect && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/app/admin';
+                });
+            }
+        });
+    });
+</script>
+</html>

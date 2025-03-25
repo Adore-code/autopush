@@ -9,19 +9,19 @@ class Auto
 {
     public function onWorkerStart(): void
     {
-        // 每分钟执行一次
+        // 每3分钟执行一次
         new Crontab('0 */3 * * * *', function(){
             $chat = new ChatController();
             $chat->getAiReply();
         });
 
-        // 每分钟执行一次
+        // 每5分钟执行一次
         new Crontab('0 */5 * * * *', function(){
             $chat = new ChatController();
             $chat->getAllOpenTasks();
         });
 
-        // 每分钟执行一次
+        // 每2分钟执行一次
         new Crontab('0 */2 * * * *', function(){
             $twitter = new CronTwitterController();
             $twitter->createArticle();
