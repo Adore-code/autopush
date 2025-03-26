@@ -181,6 +181,48 @@ class ChatController
         }
     }
 
+    public function reply($message)
+    {
+        if(empty($message['ai_template']) || empty($message['content'])) return '';
+
+        $apiKey = getenv('OPENAI_API_KEY');
+        $apiUrl = 'https://api.openai.com/v1/chat/completions';
+
+        $content  = strip_tags($message['content']);
+
+        $postData = [
+            'model' => 'gpt-4-turbo',
+            'messages' => [
+                ['role' => 'system', 'content' => $message['ai_template']],
+                ['role' => 'user',   'content' => $content]
+            ],
+            'stream' => false
+        ];
+        $client = new Client();
+
+        try {
+            $response = $client->post($apiUrl, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Content-Type'  => 'application/json'
+                ],
+                'body' => json_encode($postData),
+                'timeout' => 30
+            ]);
+
+            $body = $response->getBody()->getContents();
+            $data = json_decode($body, true);
+            $content = $data['choices'][0]['message']['content'] ?? '';
+
+            return ['code' => 200, 'reply' => $content];
+        } catch (\Throwable $e) {
+            return [
+                'code' => 500,
+                'reply' => $e->getMessage(),
+            ];
+        }
+    }
+
     protected function completions($message)
     {
         if(empty($message['x_ai_template']) || empty($message['source_content'])) return '';

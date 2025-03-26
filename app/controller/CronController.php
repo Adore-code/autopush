@@ -31,7 +31,7 @@ class CronController
             $result[$k]['new_id']     = $v[$config['new_id']];
             $result[$k]['title']      = $v[$config['title']];
             $result[$k]['sub_title']  = $v[$config['sub_title']];
-            $result[$k]['content']    = $v[$config['content']];
+            $result[$k]['content']    = strip_tags($v[$config['content']]);
             $result[$k]['link']       = $v[$config['link']];
             $result[$k]['public_at']  = $v[$config['public_at']];
             $result[$k]['source']     = $source;

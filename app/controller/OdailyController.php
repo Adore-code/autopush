@@ -41,7 +41,7 @@ class OdailyController extends CronController
             $result[$k]['new_id']     = $v[$config['new_id']];
             $result[$k]['title']      = $v[$config['title']];
             $result[$k]['sub_title']  = $v[$config['sub_title']];
-            $result[$k]['content']    = $v[$config['content']];
+            $result[$k]['content']    = strip_tags($v[$config['content']]);
             $result[$k]['link']       = $v['share_data']['default']['url'];
             $result[$k]['public_at']  = strtotime($v['published_at']);
             $result[$k]['img_url']    = $v['share_data']['default']['cover'];

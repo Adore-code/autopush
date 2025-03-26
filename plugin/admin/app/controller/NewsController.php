@@ -2,6 +2,9 @@
 
 namespace plugin\admin\app\controller;
 
+use app\controller\ChatController;
+use plugin\admin\app\model\Article;
+use plugin\admin\app\model\Task;
 use support\Request;
 use support\Response;
 use plugin\admin\app\model\News;
@@ -38,12 +41,38 @@ class NewsController extends Crud
         return view('news/index');
     }
 
+    public function reply(Request $request): Response
+    {   $id = $request->get('id');
+        $new = News::where('id', $id)->find($id);
+
+        if ($request->method() === 'POST') {
+            $x_account  = $request->post('x_account');
+            $content    = $request->post('content');
+
+            if (!$x_account) {
+                return $this->json(1, '请选择推特账号！');
+            }
+
+            $template = Db::name('wa_task')->where('x_account', $x_account)->field('x_ai_template')->find();
+            if (!$template) {
+                return $this->json(1, '请先配置AI模板！');
+            }
+
+            $chat = new ChatController();
+            $postData = ['ai_template' => $template['x_ai_template'], 'content' => $content];
+            $reply    = $chat->reply($postData);
+
+            if($reply['code'] == 200) return  $this->json(0, '获取成功', $reply);
+            return $this->json(1, '获取失败', $reply);
+        }
+        return view('news/create', ['content' => $new['content']]);
+    }
+
     public function create(Request $request): Response
     {   $id = $request->get('id');
         $new = News::where('id', $id)->find($id);
 
         if ($request->method() === 'POST') {
-            $user_id = admin_id();
             $x_account  = $request->post('x_account');
             $content    = $request->post('content');
             $ai_content = $request->post('ai_content');
@@ -60,13 +89,17 @@ class NewsController extends Crud
             }
 
             $data = [
-                'x_account' => $x_account,
+                'x_account'      => $x_account,
+                'source_id'      => $id,
+                'ai_content'     => $ai_content ?: $content,
+                'status'         => 0,
+                'created_at'     => date('Y-m-d H:i:s', time()),
+                'public_at'      => $public_at,
                 'source_content' => $content,
-                'ai_content' => $ai_content ?: $content,
-                'status' => 0,
-                'public_at' => $public_at,
                 'type' => 2
             ];
+
+            Db::name('wa_article')->insert($data);
 
             return $this->json(0, '发布成功');
         }

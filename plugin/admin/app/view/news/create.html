@@ -72,9 +72,10 @@
 <script>
 
     // 相关接口
-    const INSERT_API = "/app/admin/news/create";
+    const INSERT_API  = "/app/admin/news/create" + location.search;
     const PRIMARY_KEY = "id";
-    const SELECT_API = "/app/admin/news/select" + location.search;
+    const SELECT_API  = "/app/admin/news/select" + location.search;
+    const REPLY_API   = "/app/admin/news/reply" + location.search;
 
     // 字段 推特账户 x_account
     layui.use(["jquery", "xmSelect", "popup"], function() {
@@ -127,6 +128,7 @@
 
     //提交事件
     layui.use(["form", "popup"], function () {
+        let $ = layui.$;
         // 字段验证允许为空
         layui.form.verify({
             phone: [/(^$)|^1\d{10}$/, "请输入正确的手机号"],
@@ -135,6 +137,39 @@
             number: [/(^$)|^\d+$/,'只能填写数字'],
             date: [/(^$)|^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/, "日期格式不正确"],
             identity: [/(^$)|(^\d{15}$)|(^\d{17}(x|X|\d)$)/, "请输入正确的身份证号"]
+        });
+        layui.form.on("submit(get)", function (data) {
+            // 获取按钮对象
+            const $btn = $(data.elem);
+            $btn.prop("disabled", true); // 禁用按钮
+
+            // 开启加载动画
+            const loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff']
+            });
+            layui.$.ajax({
+                url: REPLY_API,
+                type: "POST",
+                dateType: "json",
+                data: data.field,
+                success: function (res) {
+                    layer.close(loadingIndex);     // 关闭加载动画
+                    $btn.prop("disabled", false);  // 恢复按钮
+
+                    if (res.code) {
+                        return layui.popup.failure(res.msg);
+                    }
+
+                    let obj = $('textarea[name="ai_content"]');
+                    obj.val(res.data.reply);
+                },
+                error: function () {
+                    layer.close(loadingIndex);     // 关闭加载动画
+                    $btn.prop("disabled", false);  // 恢复按钮
+                    layui.popup.failure("请求失败，请稍后重试");
+                }
+            });
+            return false;
         });
         layui.form.on("submit(save)", function (data) {
             layui.$.ajax({
