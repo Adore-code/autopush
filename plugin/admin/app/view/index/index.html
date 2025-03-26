@@ -35,6 +35,7 @@
                 <div id="control" class="layui-layout-control"></div>
                 <!-- 顶 部 右 侧 菜 单 -->
                 <ul class="layui-nav layui-layout-right">
+                    <li class="layui-nav-item layui-hide-xs expired_at"></li>
                     <li class="layui-nav-item layui-hide-xs"><a href="#" class="menuSearch layui-icon layui-icon-search"></a></li>
                     <li class="layui-nav-item layui-hide-xs"><a href="#" class="fullScreen layui-icon layui-icon-screen-full"></a></li>
                     <li class="layui-nav-item layui-hide-xs message"></li>
@@ -132,6 +133,15 @@
                     dataType: 'json',
                     success: function (res) {
                         window.Admin.Account = res.data;
+                        // 设置套餐到期时间
+                        if (res.data.expired_at) {
+                            $('.expired_at').html(`
+        <div style="display: flex; align-items: center; padding: 0 10px;">
+            <i class="layui-icon layui-icon-time" style="font-size: 16px; color: #ff5722; margin-right: 6px;"></i>
+            <span style="color: #ff5722; font-size: 13px;">套餐截止日期：${res.data.expired_at}</span>
+        </div>
+    `);
+                        }
                     }
                 });
 

@@ -6,6 +6,23 @@
 use plugin\admin\app\model\Admin;
 use plugin\admin\app\model\AdminRole;
 
+function getXAccountCount()
+{
+    return \support\think\Db::name('wa_account')->where('user_id', admin_id())->count();
+}
+
+/**
+ * 当前会员是否过期
+ * @return bool
+ * @throws Exception
+ */
+function isExpired(): bool
+{
+    $expired_at = admin('expired_at');
+    if($expired_at > time()) return false;
+    return true;
+}
+
 /**
  * 当前管理员id
  * @return integer|null

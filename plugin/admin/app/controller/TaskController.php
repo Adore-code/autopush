@@ -65,6 +65,8 @@ class TaskController extends Crud
      */
     public function insert(Request $request): Response
     {
+        if(isExpired()) return view('/plugin/autopush/public/demos/expired');
+
         if ($request->method() === 'POST') {
             // 获取要插入的账号
             $xAccount = $request->post('x_account');

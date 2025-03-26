@@ -6,7 +6,6 @@ use app\controller\TwitterController;
 use support\Request;
 use support\Response;
 use plugin\admin\app\model\TAccount;
-use plugin\admin\app\controller\Crud;
 use support\exception\BusinessException;
 
 /**
@@ -141,10 +140,13 @@ class TAccountController extends Crud
      * 插入
      * @param Request $request
      * @return Response
-     * @throws BusinessException
+     * @throws BusinessException|\Exception
      */
     public function insert(Request $request): Response
     {
+        if(isExpired()) return view('/plugin/autopush/public/demos/expired');
+        if(admin('vip') == 1 && getXAccountCount() >= 1) return view('/plugin/autopush/public/demos/v1');
+
         if ($request->method() === 'POST') {
             $post = $request->post();
             $post['user_id'] = admin_id();
@@ -152,6 +154,7 @@ class TAccountController extends Crud
             $request->setPost($post);
             return parent::insert($request);
         }
+
         return view('t-account/insert');
     }
 

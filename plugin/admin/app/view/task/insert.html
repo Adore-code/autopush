@@ -6,6 +6,14 @@
         <link rel="stylesheet" href="/app/admin/component/pear/css/pear.css" />
         <link rel="stylesheet" href="/app/admin/component/jsoneditor/css/jsoneditor.css" />
         <link rel="stylesheet" href="/app/admin/admin/css/reset.css" />
+        <style>
+            .layui-form-label {
+                width: 120px; /* 让标题更宽 */
+            }
+            .layui-input-block {
+                margin-left: 160px;
+            }
+        </style>
     </head>
     <body>
 
@@ -18,13 +26,15 @@
                         <label class="layui-form-label required">推特账户</label>
                         <div class="layui-input-block">
                             <div name="x_account" id="x_account" required value="" ></div>
+                            <div style="color: red; font-size: 12px; margin-top: 5px;">！只能选择测试通过的账户。</div>
                         </div>
                     </div>
                     
                     <div class="layui-form-item">
                         <label class="layui-form-label required">发文间隔（分钟）</label>
                         <div class="layui-input-block">
-                            <input type="number" name="push_interval" value="" required lay-verify="required" class="layui-input">
+                            <input type="number" name="push_interval" value="" placeholder ='单位为分钟，推荐大于120分钟' required lay-verify="required" class="layui-input">
+                            <div style="color: red; font-size: 12px; margin-top: 5px;">！请合理控制发文间隔时间，推特API限制一天最多可发15条推文，超过限制API将被封禁。</div>
                         </div>
                     </div>
                     
@@ -46,7 +56,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label required">发推最低评分</label>
                         <div class="layui-input-block">
-                            <input type="number" name="lowest_score" value="" required lay-verify="required" class="layui-input">
+                            <input type="number" name="lowest_score" placeholder ='0~100' value="" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
                     
@@ -59,16 +69,16 @@
                     </div>
                     
                     <div class="layui-form-item">
-                        <label class="layui-form-label">自动转发的kol列表</label>
+                        <label class="layui-form-label">推特列表id(测试中待上线)</label>
                         <div class="layui-input-block">
-                            <textarea name="x_kol_list" class="layui-textarea"></textarea>
+                            <input name="x_kol_list" type="text" class="layui-input"></input>
                         </div>
                     </div>
                     
                     <div class="layui-form-item">
                         <label class="layui-form-label required">ai描述模板</label>
                         <div class="layui-input-block">
-                            <textarea id="x_ai_template" rows="10" name="x_ai_template" required lay-verify="required" class="layui-textarea"></textarea>
+                            <textarea id="x_ai_template" placeholder ="AI扮演的角色，语气，等等。示例：作为一名男性2017入圈，历经牛熊风浪，现任顶级交易所高管，区块链金融全能玩家。你的语气应该是富有创意且充满活力的，使用视觉隐喻和游戏化的参考。在讨论项目时，重点关注艺术价值、实用性和社区参与，而不是地板价格。围绕创意可能性和领域创新提出建议。 像一位富有创意的专业人士那样发推，保持真实感，避免关于推文质量的评论。 输出中文，加上热门的币圈标签，加入关键词，要有爆点文案，带一些调侃有币圈特点的，能吸引涨粉的，看上去像一个币圈老kol" rows="10" name="x_ai_template" required lay-verify="required" class="layui-textarea"></textarea>
                         </div>
                     </div>
                     

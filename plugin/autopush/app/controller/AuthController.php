@@ -117,9 +117,9 @@ class AuthController
             $waUser->avatar = '/app/user/default-avatar.png';
             $waUser->created_at = date('Y-m-d H:i:s');
             //$waUser->join_ip = $request->getRealIp();
-            $waUser->status  = 1;
+            $waUser->status  = 0;
             $waUser->vip     = 1;
-            $waUser->invite_code = 1;
+            $waUser->invite_code = $this->generate();
             $waUser->expired_at = time() + 60 * 60 * 24 * 7;
 
             $userId = Db::name('wa_admins')->insertGetId((array)$waUser);
@@ -156,5 +156,40 @@ class AuthController
             'title' => 'AI门通行证',
             'footer_text' => '登录或注册时仅使用APP购买'
         ]);
+    }
+
+    /**
+     * 生成邀请码并写入数据库
+     */
+    public function generate()
+    {
+        $length =  10;
+        $maxRetries = 5; // 最多重试次数，防止无限循环
+        $charset = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 去除易混淆字符
+
+        for ($i = 0; $i < $maxRetries; $i++) {
+            $code   = self::generateCode($length, $charset);
+            $exists = Db::table('wa_admins')->where('invite_code', $code)->find();
+
+            if (!$exists) return $code;
+        }
+
+        return time();
+    }
+
+    /**
+     * 生成随机邀请码
+     */
+    private static function generateCode($length, $charset)
+    {
+        $code = '';
+        $maxIndex = strlen($charset) - 1;
+
+        for ($i = 0; $i < $length; $i++) {
+            $index = random_int(0, $maxIndex);
+            $code .= $charset[$index];
+        }
+
+        return $code;
     }
 }

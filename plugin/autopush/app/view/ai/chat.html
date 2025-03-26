@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>gpt-4-turbo</title>
+    <link rel="stylesheet" href="/app/autopush/css/element.index.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Helvetica Neue", sans-serif;
+            background: #f5f7fa;
+        }
+        #app {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+        }
+        .chat-message {
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            max-width: 80%;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .user {
+            background: #d1eaff;
+            align-self: flex-end;
+            text-align: right;
+            margin-left: auto;
+        }
+        .assistant {
+            background: #f0f0f0;
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<!-- Vue & Element Plus via CDN -->
+<script src="/app/autopush/js/vue.global.prod.js"></script>
+<script src="/app/autopush/js/index.full.js"></script>
+<!-- 加在 Vue 和 Element Plus 之后，main.js 之前 -->
+<script src="/app/autopush/js/marked.min.js"></script>
+<link rel="stylesheet" href="/app/autopush/js/github.min.css">
+<script src="/app/autopush/js/highlight.min.js"></script>
+
+<script src="/app/autopush/js/main.js"></script>
+</body>
+</html>

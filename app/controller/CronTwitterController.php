@@ -2,12 +2,77 @@
 
 namespace app\controller;
 
-use plugin\admin\app\model\TAccount;
+use GuzzleHttp\Exception\RequestException;
 use support\think\Db;
 use think\db\exception\DbException;
+use GuzzleHttp\Client;
+use League\OAuth1\Client\Credentials\ClientCredentials;
+use GuzzleHttp\Exception\GuzzleException;
+use League\OAuth1\Client\Server\Twitter as OAuthTwitter;
 
 class CronTwitterController
 {
+    /**
+     * 上传本地图片，返回 media_id_string
+     * @return string
+     * @throws GuzzleException
+     */
+    public function uploadMedia($user, $imagePath): string
+    {
+        $consumer_key       = $user['x_consumer_key'];
+        $consumer_secret    = $user['x_consumer_secret'];
+        $oauth_token        = $user['x_access_token'];
+        $oauth_token_secret = $user['x_access_token_secret'];
+
+        if (!file_exists($imagePath)) {
+            exit("❌ 文件不存在: $imagePath\n");
+        }
+
+        // 使用 league/oauth1-client 构建 OAuth 签名
+        $server = new OAuthTwitter([
+            'identifier' => $consumer_key,
+            'secret' => $consumer_secret,
+            'callback_uri' => 'oob',
+        ]);
+
+        $tempCredentials = new ClientCredentials();
+        $tempCredentials->setIdentifier($oauth_token);
+        $tempCredentials->setSecret($oauth_token_secret);
+
+        $uri = 'https://upload.twitter.com/1.1/media/upload.json';
+        $method = 'POST';
+
+        // 构建 OAuth 头部
+        $headers = $server->getHeaders($tempCredentials, $method, $uri, []);
+
+        // 创建 Guzzle 客户端
+        $client = new Client();
+
+        try {
+            $response = $client->post($uri, [
+                'headers' => [
+                    'Authorization' => $headers['Authorization'],
+                ],
+                'multipart' => [
+                    [
+                        'name'     => 'media',
+                        'contents' => fopen($imagePath, 'r')
+                    ]
+                ],
+            ]);
+
+            $body = json_decode($response->getBody(), true);
+
+            if (isset($body['media_id_string'])) {
+                return $body['media_id_string'];
+            } else {
+                return false;
+            }
+        } catch (RequestException $e) {
+            return false;
+        }
+    }
+
     public function createArticle()
     {
         $twitter = new TwitterController();
@@ -35,7 +100,7 @@ class CronTwitterController
 
             $content = strip_tags($account['ai_content']);
             $response = [];
-            if ($content) $response = $twitter->createTweet($settings, $content);
+            if ($content) $response = $twitter->createTweet($settings, $content, $account['img_id']);
             if ($response) {
                 $status = 1;
                 $error_info = '';

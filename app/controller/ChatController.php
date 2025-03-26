@@ -17,6 +17,8 @@ class ChatController
 
     public function getAllOpenTasks()
     {
+        $expiredAccounts = Db::name('wa_admins')->where('expired_at', '<', time())->column('id', 'id');
+
         // 获取所有任务
         $tasks = Db::name('wa_task')
             ->alias('t')
@@ -26,9 +28,11 @@ class ChatController
             ->select()
             ->toArray();
 
-        $accounts = [];
+        $accounts   = [];
         $accountIds = [];
         foreach ($tasks as $task) {
+            if(in_array($task['user_id'], $expiredAccounts)) continue;
+
             $accounts[$task['x_account']] = $task;
             $accountIds[] = $task['x_account'];
         }
@@ -84,7 +88,7 @@ class ChatController
 
             if(empty($news)) continue;
 
-            $content = "新闻内容如下，从中选取一条或几条符合角色描述的新闻组成推文：\n";
+            $content = '';
             foreach ($news as $key => $new) {
                 $content .= $key + 1 . " 标题: {$new['title']},  内容：{$new['content']} \n";
             }
@@ -140,7 +144,7 @@ class ChatController
             ->alias('r')
             ->join('wa_task t', 'r.x_account = t.x_account')
             ->where(['r.status' => 0])
-            ->field('r.*, t.x_ai_template') // 按需选字段
+            ->field('r.*, t.x_ai_template, t.x_limit') // 按需选字段
             ->select()
             ->toArray();
 
@@ -174,7 +178,6 @@ class ChatController
             } catch (DbException $e) {
                 Db::rollback();
             }
-
         }
     }
 
@@ -185,11 +188,17 @@ class ChatController
         $apiKey = getenv('OPENAI_API_KEY');
         $apiUrl = 'https://api.openai.com/v1/chat/completions';
 
+        $content = "根据这些新闻生成符合当前角色的有价值有卖点的推文：\n";
+        $content .= $message['source_content'];
+
+        if(isset($message['x_limit']) && $message['x_limit'] == 1) $content .= '字数一定要控制在80~100字，不要超过推特字数限制';
+        $content .= "\n给我可以直接发布的推文内容！";
+
         $postData = [
             'model' => 'gpt-4-turbo',
             'messages' => [
                 ['role' => 'system', 'content' => $message['x_ai_template']],
-                ['role' => 'user',   'content' => $message['source_content']]
+                ['role' => 'user',   'content' => $content]
             ],
             'stream' => false
         ];

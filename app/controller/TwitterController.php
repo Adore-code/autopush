@@ -25,14 +25,15 @@ class TwitterController
      * @param string $text 推文内容
      * @return mixed
      */
-    public function createTweet($settings, string $text): mixed
+    public function createTweet($settings, string $text, $img = ''): mixed
     {
         try {
             $client = $this->getClient($settings);
 
-            $response = $client->tweet()->create()->performRequest([
-                'text' => $text
-            ]);
+            $data = ['text' => $text];
+            if($img) $data['media'] = ['media_ids' => [$img]];
+
+            $response = $client->tweet()->create()->performRequest($data);
 
             return $response;
         } catch (\Throwable $e) {
@@ -46,9 +47,9 @@ class TwitterController
      * @param string $tweetId 要转发的推文ID
      * @return Response
      */
-    public function retweet(string $tweetId): Response
+    public function retweet($settings, string $tweetId): Response
     {
-        $client = $this->getClient();
+        $client = $this->getClient($settings);
 
         $response = $client->tweet()->retweet(['tweet_id' => $tweetId])->performRequest();
 
@@ -77,20 +78,18 @@ class TwitterController
     /**
      * 获取用户的最新推文
      *
+     * @param $settings
      * @param string $userId 用户ID
-     * @param int $maxResults 最大返回结果数（默认5）
-     * @return Response
+     * @return mixed
+     * @throws GuzzleException
+     * @throws \JsonException
      */
-    public function getUserRecentTweets(string $userId, int $maxResults = 5): Response
+    public function getUserRecentTweets($settings, string $userId)
     {
-        $client = $this->getClient();
+        $client = $this->getClient($settings);
 
-        $response = $client->users()
-            ->find($userId)
-            ->tweets()
-            ->setMaxResults($maxResults)
+        return $client->timeline()
+            ->getRecentTweets($userId)
             ->performRequest();
-
-        return json($response);
     }
 }

@@ -123,6 +123,8 @@ class AccountController extends Crud
             'mobile' => $admin['mobile'],
             'isSuperAdmin' => Auth::isSuperAdmin(),
             'token' => $request->sessionId(),
+            'vip'   => $admin['vip'],
+            'expired_at' => date('Y-m-d H:i:s', $admin['expired_at']),
         ];
         return $this->json(0, 'ok', $info);
     }
