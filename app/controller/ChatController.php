@@ -212,7 +212,7 @@ class ChatController
                     'Content-Type'  => 'application/json'
                 ],
                 'body' => json_encode($postData),
-                'timeout' => 10
+                'timeout' => 30
             ]);
 
             $body = $response->getBody()->getContents();

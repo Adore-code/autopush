@@ -75,6 +75,7 @@
 
         <!-- 表格行工具栏 -->
         <script type="text/html" id="table-bar">
+            <button class="pear-btn pear-btn-xs tool-btn" lay-event="create" permission="app.admin.news.create">创建任务</button>
             <button class="pear-btn pear-btn-xs tool-btn" lay-event="edit" permission="app.admin.news.update">编辑</button>
             <button class="pear-btn pear-btn-xs tool-btn" lay-event="remove" permission="app.admin.news.delete">删除</button>
         </script>
@@ -93,7 +94,8 @@
             const DELETE_API = "/app/admin/news/delete";
             const INSERT_URL = "/app/admin/news/insert";
             const UPDATE_URL = "/app/admin/news/update";
-            
+            const CREATE_URL = "/app/admin/news/create";
+
             // 字段 创建时间 created_at
             layui.use(["laydate"], function() {
                 layui.laydate.render({
@@ -191,7 +193,9 @@
 				
                 // 编辑或删除行事件
                 table.on("tool(data-table)", function(obj) {
-                    if (obj.event === "remove") {
+                    if (obj.event === "create") {
+                        create(obj);
+                    }else if (obj.event === "remove") {
                         remove(obj);
                     } else if (obj.event === "edit") {
                         edit(obj);
@@ -249,6 +253,17 @@
                     });
                 });
 
+                let create = function(obj) {
+                    let value = obj.data[PRIMARY_KEY];
+                    layer.open({
+                        type: 2,
+                        title: "创建定时发推",
+                        shade: 0.1,
+                        maxmin: true,
+                        area: [common.isModile()?"100%":"85%", common.isModile()?"100%":"85%"],
+                        content: CREATE_URL + "?" + PRIMARY_KEY + "=" + value
+                    });
+                }
                 // 表格新增数据
                 let add = function() {
                     layer.open({
