@@ -52,13 +52,21 @@
                             <input type="text" style="display:none" name="status" value="1" required />
                         </div>
                     </div>
-                    
+
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">发推最低评分</label>
+                        <label class="layui-form-label required">是否自动AI配图</label>
                         <div class="layui-input-block">
-                            <input type="number" name="lowest_score" placeholder ='0~100' value="" required lay-verify="required" class="layui-input">
+                            <input type="checkbox" id="x_image" lay-filter="status" required lay-skin="switch" lay-text="开启|关闭"/>
+                            <input type="text" style="display:none" name="x_image" value="1" required />
                         </div>
                     </div>
+
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label required">发推最低评分</label>-->
+<!--                        <div class="layui-input-block">-->
+<!--                            <input type="number" name="lowest_score" placeholder ='0~100' value="" required lay-verify="required" class="layui-input">-->
+<!--                        </div>-->
+<!--                    </div>-->
                     
                     <div class="layui-form-item">
                         <label class="layui-form-label">限制推文长度</label>
@@ -158,6 +166,15 @@
                     }
                 });
             });
+
+            // 字段 状态 status
+            layui.use(["form"], function() {
+                layui.$("#x_image").attr("checked", layui.$('input[name="x_image"]').val() != 0);
+                layui.form.render();
+                layui.form.on("switch(x_image)", function(data) {
+                    layui.$('input[name="x_image"]').val(this.checked ? 1 : 0);
+                });
+            })
             
             // 字段 状态 status
             layui.use(["form"], function() {

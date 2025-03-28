@@ -14,7 +14,7 @@
 			<div class="layui-row layui-col-space10">
 				<div class="layui-col-xs6 layui-col-md3">
 					<div class="layui-card top-panel">
-						<div class="layui-card-header">今日注册</div>
+						<div class="layui-card-header">今日发推数</div>
 						<div class="layui-card-body">
 							<div class="layui-row layui-col-space5">
 								<div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="value1">
@@ -45,7 +45,7 @@
 				</div>
 				<div class="layui-col-xs6 layui-col-md3">
 					<div class="layui-card top-panel">
-						<div class="layui-card-header">7日内注册</div>
+						<div class="layui-card-header">7日内发推数</div>
 						<div class="layui-card-body">
 							<div class="layui-row layui-col-space5">
 								<div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="value2">
@@ -83,7 +83,7 @@
 				</div>
 				<div class="layui-col-xs6 layui-col-md3">
 					<div class="layui-card top-panel">
-						<div class="layui-card-header">30日内注册</div>
+						<div class="layui-card-header">30日内发推数</div>
 						<div class="layui-card-body">
 							<div class="layui-row layui-col-space5">
 								<div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="value3">
@@ -113,7 +113,7 @@
 				</div>
 				<div class="layui-col-xs6 layui-col-md3">
 					<div class="layui-card top-panel">
-						<div class="layui-card-header">总注册</div>
+						<div class="layui-card-header">总发推数</div>
 						<div class="layui-card-body">
 							<div class="layui-row layui-col-space5">
 								<div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="value4">
@@ -157,40 +157,18 @@
 				</div>
 				<div class="layui-col-md3">
 					<div class="layui-card">
-						<div class="layui-card-header">系统信息</div>
+						<div class="layui-card-header">更 新 日 志</div>
 						<div class="layui-card-body">
-							<table class="layui-table">
-								<colgroup>
-									<col width="50%">
-									<col>
-								</colgroup>
-								<tbody>
-								<tr>
-									<td>Workerman版本</td>
-									<td><?=$workerman_version?></td>
-								</tr>
-								<tr>
-									<td>Webman版本</td>
-									<td><?=$webman_version?></td>
-								</tr>
-								<tr>
-									<td>WebmanAdmin版本</td>
-									<td><?=$admin_version?></td>
-								</tr>
-								<tr>
-									<td>PHP版本</td>
-									<td><?=$php_version?></td>
-								</tr>
-								<tr>
-									<td>MYSQL版本</td>
-									<td><?=$mysql_version?></td>
-								</tr>
-								<tr>
-									<td>操作系统</td>
-									<td><?=$os?></td>
-								</tr>
-								</tbody>
-							</table>
+							<ul class="list">
+								<li class="list-item"><span class="title">优化代码格式</span><span class="footer">2025-03-28 13:18</span></li>
+								<li class="list-item"><span class="title">新增消息组件</span><span class="footer">2025-03-26 11:28</span></li>
+								<li class="list-item"><span class="title">移动端兼容</span><span class="footer">2025-03-26 12:24</span></li>
+								<li class="list-item"><span class="title">系统布局优化</span><span class="footer">2025-03-24 11:09</span></li>
+								<li class="list-item"><span class="title">兼容多系统菜单模式</span><span class="footer">2025-03-21 11:28</span></li>
+								<li class="list-item"><span class="title">兼容多标签页切换</span><span class="footer">2025-03-18 00:45</span></li>
+								<li class="list-item"><span class="title">扩展下拉组件</span><span class="footer">2025-03-16 15:38</span></li>
+								<li class="list-item"><span class="title">扩展卡片样式</span><span class="footer">2025-03-11 9:28</span></li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -210,27 +188,27 @@
 				count.up("value1", {
 					time: 4000,
 					num: <?=$today_user_count?>,
-					bit: 0,
+					bit: 2,
 					regulator: 50
 				})
 
 				count.up("value2", {
 					time: 4000,
 					num: <?=$day7_user_count?>,
-					bit: 0,
+					bit: 2,
 					regulator: 50
 				})
 
 				count.up("value3", {
 					time: 4000,
 					num: <?=$day30_user_count?>,
-					bit: 0,
+					bit: 2,
 					regulator: 50
 				})
 
 				count.up("value4", {
 					time: 4000,
-					bit: 0,
+					bit: 2,
 					num: <?=$user_count?>,
 					regulator: 50
 				})
@@ -241,7 +219,7 @@
 				var option = {
 					backgroundColor: '#fff',
 					tooltip: {
-						show: false
+						show: true
 					},
 					grid: {
 						top: '10%',
@@ -277,6 +255,7 @@
 					}, ],
 					yAxis: [{
 						type: 'value',
+						name: '数量',
 						offset: 15,
 						max: 100,
 						min: 0,

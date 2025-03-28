@@ -77,6 +77,9 @@ class TaskController extends Crud
                 throw new BusinessException('该推特账号已存在，请勿重复添加');
             }
 
+            $post = $request->post();
+            $post['user_id'] = admin_id();
+            $request->setPost($post);
             return parent::insert($request);
         }
         return view('task/insert');

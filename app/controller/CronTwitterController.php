@@ -19,9 +19,9 @@ class CronTwitterController
      */
     public function uploadMedia($user, $imagePath): string
     {
-        $consumer_key       = $user['x_consumer_key'];
-        $consumer_secret    = $user['x_consumer_secret'];
-        $oauth_token        = $user['x_access_token'];
+        $consumer_key = $user['x_consumer_key'];
+        $consumer_secret = $user['x_consumer_secret'];
+        $oauth_token = $user['x_access_token'];
         $oauth_token_secret = $user['x_access_token_secret'];
 
         if (!file_exists($imagePath)) {
@@ -46,7 +46,12 @@ class CronTwitterController
         $headers = $server->getHeaders($tempCredentials, $method, $uri, []);
 
         // 创建 Guzzle 客户端
-        $client = new Client();
+        $client = new Client([
+            'proxy' => [
+                'http'  => 'socks5h://customer-Yg6CbpNhB1:PuGTjkGm03IVobz@gate-sg.ipfoxy.io:58688',
+                'https' => 'socks5h://customer-Yg6CbpNhB1:PuGTjkGm03IVobz@gate-sg.ipfoxy.io:58688',
+            ]
+        ]);
 
         try {
             $response = $client->post($uri, [
@@ -55,7 +60,7 @@ class CronTwitterController
                 ],
                 'multipart' => [
                     [
-                        'name'     => 'media',
+                        'name' => 'media',
                         'contents' => fopen($imagePath, 'r')
                     ]
                 ],
@@ -87,7 +92,7 @@ class CronTwitterController
 
         foreach ($articles as $account) {
             $publicAt = strtotime($account['public_at']);
-            if($publicAt > time()) return;
+            if ($publicAt > time()) return;
 
             $settings = [
                 'account_id' => $account['x_account'],
@@ -105,9 +110,8 @@ class CronTwitterController
                 $status = 1;
                 $error_info = '';
                 $article_id = 0;
-                if (isset($response->status))
-                {
-                    $status     = 2;
+                if (isset($response->status)) {
+                    $status = 2;
                     $error_info = $response->detail;
                 }
                 if (isset($response->data->id)) $article_id = $response->data->id;

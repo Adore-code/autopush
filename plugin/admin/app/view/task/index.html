@@ -150,6 +150,30 @@
 							return util.escape(items.join(","));
 						}
 					},{
+                        title: "AI配图",align: "center",
+                        field: "x_image",
+                        templet: function (d) {
+                            let field = "x_image";
+                            form.on("switch("+field+")", function (data) {
+                                let load = layer.load();
+                                let postData = {};
+                                postData[field] = data.elem.checked ? 1 : 0;
+                                postData[PRIMARY_KEY] = this.value;
+                                $.post(UPDATE_API, postData, function (res) {
+                                    layer.close(load);
+                                    if (res.code) {
+                                        return layui.popup.failure(res.msg, function () {
+                                            data.elem.checked = !data.elem.checked;
+                                            form.render();
+                                        });
+                                    }
+                                    return layui.popup.success("操作成功");
+                                })
+                            });
+                            let checked = d[field] == 1 ? "checked" : "";
+                            return '<input type="checkbox" value="'+util.escape(d[PRIMARY_KEY])+'" lay-filter="'+util.escape(field)+'" lay-skin="switch" lay-text="'+util.escape('开启|关闭')+'" '+checked+'/>';
+                        }
+                    },                    {
 						title: "状态",align: "center",
 						field: "status",
 						templet: function (d) {
@@ -176,6 +200,7 @@
 					},{
 						title: "发推最低评分",align: "center",
 						field: "lowest_score",
+                        hide: true,
 					},{
 						title: "限制推文长度",align: "center",
 						field: "x_limit",

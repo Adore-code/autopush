@@ -114,7 +114,12 @@ abstract class AbstractController
                 $client = new Client([
                     'base_uri' => $this->getAPIBaseURI(),
                     'handler' => $stack,
-                    'auth' => 'oauth'
+                    'auth' => 'oauth',
+                    'proxy' => [
+                        'http'  => 'http://customer-Yg6CbpNhB1:PuGTjkGm03IVobz@gate-sg.ipfoxy.io:58688',
+                        'https' => 'http://customer-Yg6CbpNhB1:PuGTjkGm03IVobz@gate-sg.ipfoxy.io:58688',
+                    ],
+                    'timeout' => 30,
                 ]);
             } else { // OAuth 2.0 Authorization Code Flow
                 throw new \RuntimeException('OAuth 2.0 Authorization Code Flow had not been implemented & also requires user interaction.');

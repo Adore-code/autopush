@@ -99,7 +99,10 @@ class AIController
             $message = $post['message'] ?? '';
             $roleType = $post['role'] ?? 'default';
             $apiKey = getenv('OPENAI_API_KEY');
+            $apiUrl = 'https://api.openai.com/v1/chat/completions';
 
+            $apiKey = getenv('BAILIAN_API_KEY');
+            $apiUrl = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
             // 初始化对话唯一 session_id
             $sid = session('sid');
             if (!$sid) {
@@ -131,13 +134,14 @@ class AIController
             ]);
 
             // 调用 OpenAI 接口
-            $response = json_decode(file_get_contents('https://api.openai.com/v1/chat/completions', false, stream_context_create([
+            $response = json_decode(file_get_contents($apiUrl, false, stream_context_create([
                 'http' => [
                     'method' => 'POST',
                     'header' => "Content-Type: application/json\r\n" .
                         "Authorization: Bearer $apiKey\r\n",
                     'content' => json_encode([
-                        'model' => 'gpt-4-turbo',
+//                        'model' => 'gpt-4-turbo',
+                        'model' => 'deepseek-v3',
                         'messages' => $history
                     ])
                 ]

@@ -61,5 +61,8 @@ return [
     ],
     'task' => [
         'handler' => \app\process\Auto::class
+    ],
+    'ws' => [
+        'handler' => \app\process\Ws::class
     ]
 ];

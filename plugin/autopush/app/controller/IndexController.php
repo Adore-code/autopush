@@ -9,7 +9,7 @@ class IndexController
 
     public function index()
     {
-        return view('index/index', ['name' => 'autopush']);
+        return view('index/help_x', ['name' => 'autopush']);
     }
 
 }

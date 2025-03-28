@@ -10,6 +10,17 @@ use function Symfony\Component\Clock\now;
 
 class ChatController
 {
+    private string|array|false $apiKey;
+    private string $apiUrl;
+
+    public function __construct()
+    {
+//        $this->apiKey = getenv('OPENAI_API_KEY');
+//        $this->apiUrl = 'https://api.openai.com/v1/chat/completions';
+        $this->apiKey = getenv('BAILIAN_API_KEY');
+        $this->apiUrl = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
+    }
+
     public function getWaitReply(): array
     {
         return Db::name('wa_reply')->where('status', '=', '0')->column('x_account', 'x_account');
@@ -89,8 +100,8 @@ class ChatController
             if(empty($news)) continue;
 
             $content = '';
-            foreach ($news as $key => $new) {
-                $content .= $key + 1 . " 标题: {$new['title']},  内容：{$new['content']} \n";
+            foreach ($news as $new) {
+                $content .= " {$new['content']} \n\n";
             }
 
             $data = [
@@ -185,13 +196,15 @@ class ChatController
     {
         if(empty($message['ai_template']) || empty($message['content'])) return '';
 
-        $apiKey = getenv('OPENAI_API_KEY');
-        $apiUrl = 'https://api.openai.com/v1/chat/completions';
+        $apiKey = $this->apiKey;
+        $apiUrl = $this->apiUrl;
 
         $content  = strip_tags($message['content']);
 
         $postData = [
-            'model' => 'gpt-4-turbo',
+//            'model' => 'gpt-4-turbo',
+            'model' => 'deepseek-v3',
+
             'messages' => [
                 ['role' => 'system', 'content' => $message['ai_template']],
                 ['role' => 'user',   'content' => $content]
@@ -227,19 +240,28 @@ class ChatController
     {
         if(empty($message['x_ai_template']) || empty($message['source_content'])) return '';
 
-        $apiKey = getenv('OPENAI_API_KEY');
-        $apiUrl = 'https://api.openai.com/v1/chat/completions';
+        $apiKey = $this->apiKey;
+        $apiUrl = $this->apiUrl;
 
-        $content = "根据这些新闻生成符合当前角色的有价值有卖点的推文：\n";
+        $x_ai_template = $message['x_ai_template'];
+        $content = "\n\n总结以下新闻生成一条符合当前角色描述的有价值有卖点的推文：\n";
         $content .= $message['source_content'];
 
-        if(isset($message['x_limit']) && $message['x_limit'] == 1) $content .= '字数一定要控制在80~100字，不要超过推特字数限制';
-        $content .= "\n给我可以直接发布的推文内容！";
+        if(isset($message['x_limit']) && $message['x_limit'] == 1) $x_ai_template .= '字数一定要控制在80~100字，不要超过推特字数限制';
+
+//        $postData = [
+//            'model' => 'gpt-4-turbo',
+//            'messages' => [
+//                ['role' => 'system', 'content' => $x_ai_template],
+//                ['role' => 'user',   'content' => $content]
+//            ],
+//            'stream' => false
+//        ];
 
         $postData = [
-            'model' => 'gpt-4-turbo',
+            'model' => 'deepseek-v3',
             'messages' => [
-                ['role' => 'system', 'content' => $message['x_ai_template']],
+                ['role' => 'system', 'content' => $x_ai_template],
                 ['role' => 'user',   'content' => $content]
             ],
             'stream' => false

@@ -8,19 +8,19 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '23f09fe3194f8c2f70923f90d6702129' => __DIR__ . '/..' . '/illuminate/collections/functions.php',
         '60799491728b879e74601d83e38b2cad' => __DIR__ . '/..' . '/illuminate/collections/helpers.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         'f625ee536139dfb962a398b200bdb2bd' => __DIR__ . '/..' . '/illuminate/support/functions.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'd2136ff22b54ac75cd96a40e0022218e' => __DIR__ . '/..' . '/workerman/webman-framework/src/support/helpers.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
@@ -58,6 +58,7 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
             'Workerman\\Coroutine\\' => 20,
             'Workerman\\' => 10,
             'Webman\\ThinkOrm\\' => 16,
+            'Webman\\Redis\\' => 13,
             'Webman\\Openai\\' => 14,
             'Webman\\Event\\' => 13,
             'Webman\\Database\\' => 16,
@@ -112,6 +113,7 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         array (
             'Intervention\\Image\\' => 19,
             'Illuminate\\Support\\' => 19,
+            'Illuminate\\Redis\\' => 17,
             'Illuminate\\Pipeline\\' => 20,
             'Illuminate\\Pagination\\' => 22,
             'Illuminate\\Events\\' => 18,
@@ -169,6 +171,7 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
             0 => __DIR__ . '/..' . '/webman/database/src/support',
             1 => __DIR__ . '/..' . '/webman/think-orm/src/support',
             2 => __DIR__ . '/..' . '/workerman/webman-framework/src/support',
+            3 => __DIR__ . '/..' . '/webman/redis/src/support',
         ),
         'app\\View\\Components\\' => 
         array (
@@ -202,6 +205,10 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
         'Webman\\ThinkOrm\\' => 
         array (
             0 => __DIR__ . '/..' . '/webman/think-orm/src',
+        ),
+        'Webman\\Redis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webman/redis/src',
         ),
         'Webman\\Openai\\' => 
         array (
@@ -350,6 +357,10 @@ class ComposerStaticInit691f538563ac6695008ddc51b7722c80
             1 => __DIR__ . '/..' . '/illuminate/conditionable',
             2 => __DIR__ . '/..' . '/illuminate/macroable',
             3 => __DIR__ . '/..' . '/illuminate/support',
+        ),
+        'Illuminate\\Redis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/redis',
         ),
         'Illuminate\\Pipeline\\' => 
         array (
