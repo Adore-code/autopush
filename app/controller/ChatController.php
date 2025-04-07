@@ -243,7 +243,8 @@ class ChatController
         $apiKey = $this->apiKey;
         $apiUrl = $this->apiUrl;
 
-        $x_ai_template = $message['x_ai_template'];
+        $x_ai_template  = $message['x_ai_template'];
+        $x_ai_template .= '注意！推文内容中不要含有政治敏感信息，以及推特限制的敏感词等等';
         $content = "\n\n总结以下新闻生成一条符合当前角色描述的有价值有卖点的推文：\n";
         $content .= $message['source_content'];
 

@@ -118,7 +118,7 @@ class WsController
 
                 // 写入数据库日志
                 Db::name('wa_chat_logs')->insert([
-                    'user_id' => admin_id(),
+                    'user_id' => 2,
                     'role' => $role,
                     'question' => $message,
                     'answer' => $responseText,
