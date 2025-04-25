@@ -245,7 +245,7 @@ class ChatController
 
         $x_ai_template  = $message['x_ai_template'];
         $x_ai_template .= '注意！推文内容中不要含有政治敏感信息，以及推特限制的敏感词等等';
-        $content = "\n\n总结以下新闻生成一条符合当前角色描述的有价值有卖点的推文：\n";
+        $content = "\n\n从以下新闻中生成一条推文，要符合当前角色，有价值有卖点：\n";
         $content .= $message['source_content'];
 
         if(isset($message['x_limit']) && $message['x_limit'] == 1) $x_ai_template .= '字数一定要控制在80~100字，不要超过推特字数限制';
